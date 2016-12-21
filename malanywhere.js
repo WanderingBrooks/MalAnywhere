@@ -6,18 +6,13 @@ function malanywhereController(request) {
         var expectedCount = request.data.titles.length;
         var activeCount = 0;
         var results = [];
+        var localUser;
+        var localPassword;
         malanywhereGetCredentials(
-            function (result) {
-                if (!chrome.runtime.error) {
-                    if ($.isEmptyObject(result)) {
-                        alert("Please sign in a new tab has been opened with the login page");
-                        chrome.runtime.openOptionsPage();
-                    }
-                    malanywhereSearch(result.malotgData.username, result.malotgData.password);
-                }
-                else {
-                    chromeGetFail();
-                }
+            function (user, password) {
+                localUser = user;
+                localPassword = password;
+                malanywhereSearch(user, password);
             });
 
         function malanywhereSearch(user, password) {
@@ -131,7 +126,7 @@ function malanywhereController(request) {
                     var $my_finish_date = formatDate($anime.find("my_finish_date").text());
                     malanywhereSendInfo({
                         "message": "set status",
-                        "code": 0,
+                        "code": 1,
                         "values": {
                             "series_title": title,
                             "my_status": $anime.find("my_status").text(),
@@ -141,7 +136,9 @@ function malanywhereController(request) {
                             "my_start_date": $my_start_date,
                             "my_finish_date": $my_finish_date,
                             "my_tags": $anime.find("my_tags").text(),
-                            "series_animedb_id": id
+                            "series_animedb_id": id,
+                            "user": localUser,
+                            "password": localPassword
                         }
                     });
                 }
@@ -149,7 +146,7 @@ function malanywhereController(request) {
                 else {
                     malanywhereSendInfo({
                         "message": "set status",
-                        "code": -1,
+                        "code": 0,
                         "values": {
                             "series_title": title,
                             "my_status": "",
@@ -159,7 +156,9 @@ function malanywhereController(request) {
                             "my_start_date": "",
                             "my_finish_date": "",
                             "my_tags": "",
-                            "series_animedb_id": id
+                            "series_animedb_id": id,
+                            "user": localUser,
+                            "password": localPassword
                         }
                     });
                 }
@@ -183,7 +182,7 @@ function malanywhereController(request) {
         function insertError() {
             malanywhereSendInfo({
                 "message": "set status",
-                "code": -2,
+                "code": -1,
                 "values": {
                     "series_title": "",
                     "my_status": "",
@@ -193,10 +192,13 @@ function malanywhereController(request) {
                     "my_start_date": "",
                     "my_finish_date": "",
                     "my_tags": "",
-                    "series_animedb_id": ""
+                    "series_animedb_id": "",
+                    "user": localUser,
+                    "password": localPassword
                 }
             });
         }
+
     }
 
     else if (request.message === "AUD") {
@@ -227,21 +229,17 @@ function malanywhereController(request) {
 
     }
 
+    else if (request.message === "save credentials") {
+        getCredentialsAndSend("verify", request.data, -1);
+    }
+
     // Grouping of Ajaxes makes them call back functions for help with asynchronous programming
     function getCredentialsAndSend(mode, data, id) {
         malanywhereGetCredentials(
-            function (result) {
-                if (!chrome.runtime.error) {
-                    if ($.isEmptyObject(result)) {
-                        alert("Please sign in a new tab has been opened with the login page");
-                        chrome.runtime.openOptionsPage();
-                    }
-                    sendRequest(mode, data, id, result.malotgData.username, result.malotgData.password);
-                }
-                else {
-                    chromeGetFail();
-                }
+            function (user, password) {
+                sendRequest(mode, data, id, user, password);
             });
+
     }
 
     // Function that contains all the ajaxes differentiate between them with the variable mode
@@ -286,7 +284,7 @@ function malanywhereController(request) {
             $.ajax({
                 "url": "http://myanimelist.net/malappinfo.php",
                 "data": {"u": user, "status": "all", "type": "anime"},
-                "success": findAnimeCreator(id, data.title, data.episodes),
+                "success": findAnimeCreator(id, data.title, data.episodes, user, password),
                 "dataType": "xml",
                 "error": userFail
             });
@@ -302,11 +300,21 @@ function malanywhereController(request) {
                 "password": password
             })
         }
+        else if (mode === "verify") {
+            $.ajax({
+                "url": "https://myanimelist.net/api/account/verify_credentials.xml",
+                "error": getInfo,
+                "username": data.user,
+                "password": data.password,
+                "success": malanywhereSaveCredentials(data.user, data.password)
+            });
+        }
 
         function getInfo(data, textStatus, jqXHR) {
             malanywhereSendInfo({
                 "message": "information update",
                 "data": {"id": id},
+                "code": 2,
                 "advancedOptions": request.advancedOptions,
                 "text": jqXHR.responseText
             });
@@ -315,6 +323,15 @@ function malanywhereController(request) {
     }
 
 }
+
+function insertLogin() {
+    malanywhereSendInfo({
+        "message": "set status",
+        "code": -2,
+        "values": -2
+    });
+}
+
 
 
 

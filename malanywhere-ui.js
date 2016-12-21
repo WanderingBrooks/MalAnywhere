@@ -5,13 +5,13 @@
 function malanywhereUIController(request) {
     if( request.message === ("show hide") ) {
         // does the Element actually exist
-        if (document.getElementById("malotg")) {
+        if (document.getElementById("malanywhere")) {
             // Switch between hidden and visible
-            if (document.getElementById("malotg").style.display == "inline") {
-                document.getElementById("malotg").style.display = "none";
+            if (document.getElementById("malanywhere").style.display == "inline") {
+                document.getElementById("malanywhere").style.display = "none";
             }
-            else if (document.getElementById("malotg").style.display == "none") {
-                document.getElementById("malotg").style.display = "inline";
+            else if (document.getElementById("malanywhere").style.display == "none") {
+                document.getElementById("malanywhere").style.display = "inline";
             }
         }
     }
@@ -20,9 +20,12 @@ function malanywhereUIController(request) {
         inject(request.injectLocation, request.fileLocation, request.code, request.values);
     }
     else if ( request.message === "information update") {
-        if (document.getElementById("malotg")) {
+        if (document.getElementById("malanywhere")) {
             if (request.advancedOptions) {
                 openEditPage(request.data.id);
+            }
+            if (request.code == -1) {
+                sendTitles();
             }
             document.getElementById("malotg-info").textContent = request.text;
             setTimeout(function() {
@@ -39,8 +42,8 @@ function createListeners(code, previousStatus) {
 
     function submitListener() {
 
-        if (code === -1) {
-            code = 0;
+        if (code === 0) {
+            code = 1;
             var info = {
                 "message": "AUD",
                 "type": "add",
@@ -63,10 +66,10 @@ function createListeners(code, previousStatus) {
                 },
                 "id": previousStatus.series_animedb_id
             };
-            malanywhereAUD(info);
+            malanywhereRequest(info);
         }
 
-        else if (code === 0) {
+        else if (code === 1) {
             var info = {
                 "message": "AUD",
                 "type": "update",
@@ -89,24 +92,24 @@ function createListeners(code, previousStatus) {
                 },
                 "id": previousStatus.series_animedb_id
             };
-            malanywhereAUD(info);
+            malanywhereRequest(info);
         }
 
     }
 
     function deleteListener() {
-        code = -1;
+        code = 0;
         var info = {
             "message": "AUD",
             "type": "delete",
             "id": previousStatus.series_animedb_id,
             "data": -1
         };
-        malanywhereAUD(info);
-        setStatus(-1, previousStatus);
+        malanywhereRequest(info);
+        setStatus(0, previousStatus);
     }
 
-    function showListener() {
+    function showAdvancedListener() {
         if (document.getElementById("malotg-advanced")) {
             if (document.getElementById("malotg-advanced").style.displey = "none") {
                 document.getElementById("malotg-advanced").style.display = "inline";
@@ -116,7 +119,7 @@ function createListeners(code, previousStatus) {
         }
     }
 
-    function hideListener() {
+    function hideAdvancedListener() {
         if (document.getElementById("malotg-advanced")) {
             if ( document.getElementById("malotg-advanced").style.displey = "inline") {
                 document.getElementById("malotg-advanced").style.display = "none";
@@ -125,6 +128,7 @@ function createListeners(code, previousStatus) {
             }
         }
     }
+
     // This function submits to make sure that no user info is lost before going to myanimelist
     function moreOptionsListener() {
         if ( statusChange(previousStatus) ) {
@@ -139,26 +143,89 @@ function createListeners(code, previousStatus) {
         }
     }
 
+    function showLoginListener() {
+        if (document.getElementById("malotg-login")) {
+            if (document.getElementById("malotg-login").style.displey = "none") {
+                document.getElementById("malotg-login").style.display = "inline";
+                document.getElementById("malotg-hide-login").style.display = "inline";
+                document.getElementById("malotg-show-login").style.display = "none";
+            }
+        }
+    }
+
+    function hideLoginListener() {
+        if (document.getElementById("malotg-login")) {
+            if ( document.getElementById("malotg-login").style.displey = "inline") {
+                document.getElementById("malotg-login").style.display = "none";
+                document.getElementById("malotg-hide-login").style.display = "none";
+                document.getElementById("malotg-show-login").style.display = "inline";
+            }
+        }
+    }
+
+    // Saves the users credentials in chrome local as an object called malotgData
+    function saveCredentialsListener() {
+        var username = document.getElementById("malotg-username").value;
+        var password = document.getElementById("malotg-password").value;
+        var info = {
+            "message": "save credentials",
+            "data": {
+                "user": username,
+                "password": password
+            }
+        };
+        malanywhereRequest(info);
+    }
+
+    // Function that turns the password input from password to txt and vise versa
+    function togglePassword(){
+        var password = document.getElementById("malotg-password");
+        if (password.type == "password") {
+            password.setAttribute('type', 'text');
+        }
+        else {
+            password.setAttribute('type', 'password');
+        }
+    }
+
     $("#malotg-submit").on("click", submitListener);
     $("#malotg-delete").on("click", deleteListener);
-    $("#malotg-show-advanced").on("click", showListener);
-    $("#malotg-hide-advanced").on("click", hideListener);
+    $("#malotg-show-advanced").on("click", showAdvancedListener);
+    $("#malotg-hide-advanced").on("click", hideAdvancedListener);
     $("#malotg-more-options").on("click", moreOptionsListener);
+    $("#malotg-hide-login").on("click", hideLoginListener);
+    $("#malotg-show-login").on("click", showLoginListener);
+    $("#malotg-save").on("click", saveCredentialsListener);
+    $("#malotg-showhide-password").on("click", togglePassword);
+
+
 
 
 }
 
 function setStatus(code, currentStatus) {
     if (code == -2) {
+        document.getElementById("malotg-values").style.display = "none";
+        document.getElementById("malotg-login").style.display = "inline";
+    }
+    else if (code == -1) {
         document.getElementById("malotg-series_title").textContent = "Anime Not Found";
-        document.getElementById("malotg-series_title").href = "https://myanimelist.net/" + "404" + "/" ;
+        document.getElementById("malotg-series_title").href = "https://myanimelist.net/" + "404" + "/";
         document.getElementById("malotg-my_status").disabled = true;
         document.getElementById("malotg-my_watched_episodes").disabled = true;
         document.getElementById("malotg-my_score").disabled = true;
         document.getElementById("malotg-my_finish_date").disabled = true;
         document.getElementById("malotg-my_start_date").disabled = true;
+        document.getElementById("malotg-show-advanced").disabled = true;
+        document.getElementById("malotg-hide-advanced").disabled = true;
+        document.getElementById("malotg-my_tags").disabled = true;
+        document.getElementById("malotg-more-options").disabled = true;
+        document.getElementById("malotg-submit").disabled = true;
+        document.getElementById("malotg-delete").disabled = true;
+        document.getElementById("malotg-username").value = currentStatus.user;
+        document.getElementById("malotg-password").value = currentStatus.password;
     }
-    else if (code == -1) {
+    else if (code == 0) {
         if (currentStatus.series_episodes == 0) {
             currentStatus.series_episodes = "?"
         }
@@ -174,9 +241,11 @@ function setStatus(code, currentStatus) {
         document.getElementById("malotg-my_start_date").value = "";
         document.getElementById("malotg-my_finish_date").value = "";
         document.getElementById("malotg-my_tags").value = "";
-        document.getElementById("malotg-more-options").href = "https://myanimelist.net/ownlist/anime/" + currentStatus.series_animedb_id     + "/edit";
+        document.getElementById("malotg-more-options").href = "https://myanimelist.net/ownlist/anime/" + currentStatus.series_animedb_id + "/edit";
+        document.getElementById("malotg-username").value = currentStatus.user;
+        document.getElementById("malotg-password").value = currentStatus.password;
     }
-    else if (code == 0) {
+    else if (code == 1) {
         if (currentStatus.series_episodes == 0) {
             currentStatus.series_episodes = "?"
         }
@@ -193,26 +262,39 @@ function setStatus(code, currentStatus) {
         document.getElementById("malotg-my_finish_date").value = currentStatus.my_finish_date;
         document.getElementById("malotg-my_tags").value = currentStatus.my_tags;
         document.getElementById("malotg-more-options").href = "https://myanimelist.net/ownlist/anime/" + currentStatus.series_animedb_id + "/edit";
+        document.getElementById("malotg-username").value = currentStatus.user;
+        document.getElementById("malotg-password").value = currentStatus.password;
     }
 }
 
 function inject(injectLocation, fileLocation, code, currentStatus) {
-    var div = document.createElement("div");
-    div.id = "malotg";
-    $.get(fileLocation, function(data) {
-        div.innerHTML = data;
-        injectLocation(div);
-        document.getElementById("malotg").style.display = "none";
+    if (!(document.getElementById("malanywhere"))) {
+        var div = document.createElement("div");
+        div.id = "malanywhere";
+        $.get(fileLocation, function (data) {
+            div.innerHTML = data;
+            injectLocation(div);
+            document.getElementById("malanywhere").style.display = "none";
+            createListeners(code, currentStatus);
+            setStatus(code, currentStatus);
+            $(function () {
+                $("#malotg-my_start_date").datepicker({
+                    changeMonth: true,
+                    changeYear: true
+                });
+                $("#malotg-my_finish_date").datepicker({
+                    changeMonth: true,
+                    changeYear: true
+                });
+            });
+            document.getElementById("malanywhere").style.display = "inline";
+        });
+    }
+    else {
         setStatus(code, currentStatus);
-        createListeners(code, currentStatus);
-        $( function() {
-            $( "#malotg-my_start_date" ).datepicker({changeMonth: true,
-                changeYear: true});
-            $( "#malotg-my_finish_date" ).datepicker({changeMonth: true,
-                changeYear: true});
-        } );
-        document.getElementById("malotg").style.display = "inline";
-    });
+        document.getElementById("malanywhere").style.display = "inline";
+    }
+
 
 }
 
