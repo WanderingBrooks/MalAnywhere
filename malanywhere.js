@@ -1,13 +1,12 @@
 function malanywhereController(request) {
-
+    var localUser;
+    var localPassword;
     if (request.message === "get info") {
 
         // Initializes the values for how many ajaxes should return how many have returned and the data returned by them
         var expectedCount = request.data.titles.length;
         var activeCount = 0;
         var results = [];
-        var localUser;
-        var localPassword;
         malanywhereGetCredentials(
             function (user, password) {
                 localUser = user;
@@ -78,7 +77,7 @@ function malanywhereController(request) {
                     }
                     // If we got a hit
                     if ($animeID != -1) {
-                        getCredentialsAndSend("user values", {
+                        sendRequest("user values", {
                             "title": $animeTitle,
                             "episodes": $animeEpisodes
                         }, $animeID, false);
@@ -122,8 +121,6 @@ function malanywhereController(request) {
                 // If the id has been found send the pertinent information to be displayed
                 if ($animeID.text() != -1) {
                     var $anime = $animeID.parent();
-                    var $my_start_date = formatDate($anime.find("my_start_date").text());
-                    var $my_finish_date = formatDate($anime.find("my_finish_date").text());
                     malanywhereSendInfo({
                         "message": "set status",
                         "code": 1,
@@ -133,8 +130,8 @@ function malanywhereController(request) {
                             "my_score": $anime.find("my_score").text(),
                             "series_episodes": $anime.find("series_episodes").text(),
                             "my_watched_episodes": $anime.find("my_watched_episodes").text(),
-                            "my_start_date": $my_start_date,
-                            "my_finish_date": $my_finish_date,
+                            "my_start_date": $anime.find("my_start_date").text(),
+                            "my_finish_date": $anime.find("my_finish_date").text(),
                             "my_tags": $anime.find("my_tags").text(),
                             "series_animedb_id": id,
                             "user": localUser,
@@ -149,10 +146,10 @@ function malanywhereController(request) {
                         "code": 0,
                         "values": {
                             "series_title": title,
-                            "my_status": "",
-                            "my_score": "",
+                            "my_status": "1",
+                            "my_score": "0",
                             "series_episodes": episodes,
-                            "my_watched_episodes": "",
+                            "my_watched_episodes": "0",
                             "my_start_date": "",
                             "my_finish_date": "",
                             "my_tags": "",
@@ -165,17 +162,6 @@ function malanywhereController(request) {
             }
 
             return findAnime;
-        }
-
-        /* Formats the My anime list formatted date to human readable version
-         * Input is text not a JQUERY object*/
-        function formatDate(date) {
-            if (date === '0000-00-00') {
-                return '';
-            }
-            else {
-                return date.substring(5, 7) + "/" + date.substring(8) + "/" + date.substring(0, 4);
-            }
         }
 
         // If the anime was not found in the Mal database send an error to be displayed to the user
@@ -202,48 +188,19 @@ function malanywhereController(request) {
     }
 
     else if (request.message === "AUD") {
-        getCredentialsAndSend(request.type, request.data, request.id);
-
-
-        /* Converts a object to an xml tree */
-        /* Objects should only be mappings from strings to primitive types strings, booleans, numbers (NOT OBJECTS, OR ARRAYS, OR FUNCTION or ...) */
-        function objectToXML(object, rootName) {
-            var xmlDoc = document.implementation.createDocument("", rootName, null);
-            var keys = Object.keys(object);
-            for (var i = 0; i < keys.length; i++) {
-
-                var key = keys[i];
-                var value = object[key];
-
-                var xmlNode = xmlDoc.createElement(key);
-                xmlDoc.documentElement.appendChild(xmlNode);
-                xmlNode.appendChild(xmlDoc.createTextNode(value));
-            }
-            return xmlDoc;
-        }
-
-        // Tells the user to email me because something went wrong
-        function userFail() {
-            alert("An error occurred getting your user values please email cs.jasonbrooks@gmail.com");
-        }
-
+        sendRequest(request.type, request.data, request.id);
     }
 
     else if (request.message === "save credentials") {
-        getCredentialsAndSend("verify", request.data, -1);
+        sendRequest("verify", request.data, -1, request.data.user, request.data.password);
     }
 
-    // Grouping of Ajaxes makes them call back functions for help with asynchronous programming
-    function getCredentialsAndSend(mode, data, id) {
-        malanywhereGetCredentials(
-            function (user, password) {
-                sendRequest(mode, data, id, user, password);
-            });
-
+    else if (request.message === "delete credentials") {
+        malanywhereDeleteCredentials();
     }
 
     // Function that contains all the ajaxes differentiate between them with the variable mode
-    function sendRequest(mode, data, id, user, password) {
+    function sendRequest(mode, data, id) {
         if (mode == "add") {
             var xml = objectToXML(data, "entry");
             var xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + new XMLSerializer().serializeToString(xml);
@@ -253,8 +210,8 @@ function malanywhereController(request) {
                 "data": {"data": xmlString},
                 "success": getInfo,
                 "error": getInfo,
-                "username": user,
-                "password": password
+                "username": localUser,
+                "password": localPassword
             });
         }
         else if (mode == "update") {
@@ -266,8 +223,8 @@ function malanywhereController(request) {
                 "data": {"data": xmlString},
                 "success": getInfo,
                 "error": getInfo,
-                "username": user,
-                "password": password
+                "username": localUser,
+                "password": localPassword
             });
         }
         else if (mode === "delete") {
@@ -276,15 +233,15 @@ function malanywhereController(request) {
                 "type": "POST",
                 "success": getInfo,
                 "error": getInfo,
-                "username": user,
-                "password": password
+                "username": localUser,
+                "password": localPassword
             });
         }
         else if (mode == "user values") {
             $.ajax({
                 "url": "http://myanimelist.net/malappinfo.php",
-                "data": {"u": user, "status": "all", "type": "anime"},
-                "success": findAnimeCreator(id, data.title, data.episodes, user, password),
+                "data": {"u": localUser, "status": "all", "type": "anime"},
+                "success": findAnimeCreator(id, data.title, data.episodes),
                 "dataType": "xml",
                 "error": userFail
             });
@@ -296,8 +253,8 @@ function malanywhereController(request) {
                 "success": determineShow,
                 "dataType": "xml",
                 "async": false,
-                "username": user,
-                "password": password
+                "username": localUser,
+                "password": localPassword
             })
         }
         else if (mode === "verify") {
@@ -320,6 +277,28 @@ function malanywhereController(request) {
             });
         }
 
+    }
+
+    /* Converts a object to an xml tree */
+    /* Objects should only be mappings from strings to primitive types strings, booleans, numbers (NOT OBJECTS, OR ARRAYS, OR FUNCTION or ...) */
+    function objectToXML(object, rootName) {
+        var xmlDoc = document.implementation.createDocument("", rootName, null);
+        var keys = Object.keys(object);
+        for (var i = 0; i < keys.length; i++) {
+
+            var key = keys[i];
+            var value = object[key];
+
+            var xmlNode = xmlDoc.createElement(key);
+            xmlDoc.documentElement.appendChild(xmlNode);
+            xmlNode.appendChild(xmlDoc.createTextNode(value));
+        }
+        return xmlDoc;
+    }
+
+    // Tells the user to email me because something went wrong
+    function userFail() {
+        alert("An error occurred getting your user values please email cs.jasonbrooks@gmail.com");
     }
 
 }
