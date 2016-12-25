@@ -1,0 +1,116 @@
+#malanywhere {
+    font-family: Verdana, Arial;
+    font-size: 13px;
+}
+
+.malanywhere-links {
+    text-decoration: none;
+    color: #1d439b;
+}
+.malanywhere-links:hover{
+    text-decoration: underline !important;
+}
+
+#malanywhere-login>div, #malanywhere-values>div  {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#malanywhere-in {
+    display: none;
+}
+
+#malanywhere-out, #malanywhere-in {
+    margin-left: 30px;
+}
+
+.value-label {
+    cursor: default;
+    font-size: 11px;
+}
+
+.malanywhere-label-input {
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+}
+
+.malanywhere-input {
+    margin-left: 20px;
+}
+
+#malanywhere-my_watched_episodes {
+    width: 50px;
+}
+
+#malanywhere-info {
+    margin-left: 70px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+#malanywhere-values-buttons {
+    margin-left: 65px;
+}
+
+#malanywhere-hide-advanced, #malanywhere-hide-login, #malanywhere-login, #malanywhere-advanced {
+    display: none;
+}
+
+.malanywhere-clear-button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    color: #1d439b;
+    text-align: center;
+}
+
+.malanywhere-show-hide {
+    margin-left: 70px;
+}
+
+#malanywhere-show-login, #malanywhere-hide-login {
+    margin-left: 10px;
+}
+
+#malanywhere-more-options {
+    margin-left: 40px;
+}
+
+#malanywhere-my_tags {
+    resize: none;
+}
+.malanywhere-normal-buttons {
+    margin-right: 30px;
+    border-style: solid;
+    border-top-width: 1px;
+    border-left-width: 1px;
+    border-bottom-width: 1px;
+    border-right-width: 1px;
+    border-top-color: #6c8cd8;
+    border-left-color: #6c8cd8;
+    border-bottom-color: #2e51a2;
+    border-right-color: #2e51a2;
+    background-color: #4165ba;
+    color: #FFFFFF;
+    font-size: 11px;
+    text-decoration: none;
+    padding: 1px 3px;
+    font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+    cursor: pointer;
+}
+
+.malanywhere-normal-buttons:disabled {
+    cursor: default;
+    background-color: #6c8cd8;
+    color: #FFF;
+}
+
+.malanywhere-clear-button:disabled {
+    cursor: default;
+    color: #6c8cd8;
+
+}
+.ui-widget-header .ui-icon {
+    background-image: url("https://code.jquery.com/ui/1.12.1/themes/base/images/ui-icons_444444_256x240.png");
+}

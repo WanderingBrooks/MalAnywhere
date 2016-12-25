@@ -1,6 +1,6 @@
 function malanywhereController(request) {
-    var localUser;
-    var localPassword;
+    var user;
+    var password;
     if (request.message === "get info") {
 
         // Initializes the values for how many ajaxes should return how many have returned and the data returned by them
@@ -8,10 +8,10 @@ function malanywhereController(request) {
         var activeCount = 0;
         var results = [];
         malanywhereGetCredentials(
-            function (user, password) {
-                localUser = user;
-                localPassword = password;
-                malanywhereSearch(user, password);
+            function (u, p) {
+                user = u;
+                password = p;
+                malanywhereSearch(u, p);
             });
 
         function malanywhereSearch(user, password) {
@@ -122,7 +122,7 @@ function malanywhereController(request) {
                 if ($animeID.text() != -1) {
                     var $anime = $animeID.parent();
                     malanywhereSendInfo({
-                        "message": "set status",
+                        "message": "set values",
                         "code": 1,
                         "values": {
                             "series_title": title,
@@ -134,15 +134,15 @@ function malanywhereController(request) {
                             "my_finish_date": $anime.find("my_finish_date").text(),
                             "my_tags": $anime.find("my_tags").text(),
                             "series_animedb_id": id,
-                            "user": localUser,
-                            "password": localPassword
+                            "user": user,
+                            "password": password
                         }
                     });
                 }
                 // If it wasn't found in the users list send the information we have to be displayed allows updating
                 else {
                     malanywhereSendInfo({
-                        "message": "set status",
+                        "message": "set values",
                         "code": 0,
                         "values": {
                             "series_title": title,
@@ -154,8 +154,8 @@ function malanywhereController(request) {
                             "my_finish_date": "",
                             "my_tags": "",
                             "series_animedb_id": id,
-                            "user": localUser,
-                            "password": localPassword
+                            "user": user,
+                            "password": password
                         }
                     });
                 }
@@ -167,7 +167,7 @@ function malanywhereController(request) {
         // If the anime was not found in the Mal database send an error to be displayed to the user
         function insertError() {
             malanywhereSendInfo({
-                "message": "set status",
+                "message": "set values",
                 "code": -1,
                 "values": {
                     "series_title": "",
@@ -179,8 +179,8 @@ function malanywhereController(request) {
                     "my_finish_date": "",
                     "my_tags": "",
                     "series_animedb_id": "",
-                    "user": localUser,
-                    "password": localPassword
+                    "user": user,
+                    "password": password
                 }
             });
         }
@@ -210,8 +210,8 @@ function malanywhereController(request) {
                 "data": {"data": xmlString},
                 "success": getInfo,
                 "error": getInfo,
-                "username": localUser,
-                "password": localPassword
+                "username": user,
+                "password": password
             });
         }
         else if (mode == "update") {
@@ -223,8 +223,8 @@ function malanywhereController(request) {
                 "data": {"data": xmlString},
                 "success": getInfo,
                 "error": getInfo,
-                "username": localUser,
-                "password": localPassword
+                "username": user,
+                "password": password
             });
         }
         else if (mode === "delete") {
@@ -233,14 +233,14 @@ function malanywhereController(request) {
                 "type": "POST",
                 "success": getInfo,
                 "error": getInfo,
-                "username": localUser,
-                "password": localPassword
+                "username": user,
+                "password": password
             });
         }
         else if (mode == "user values") {
             $.ajax({
                 "url": "http://myanimelist.net/malappinfo.php",
-                "data": {"u": localUser, "status": "all", "type": "anime"},
+                "data": {"u": user, "status": "all", "type": "anime"},
                 "success": findAnimeCreator(id, data.title, data.episodes),
                 "dataType": "xml",
                 "error": userFail
@@ -253,8 +253,8 @@ function malanywhereController(request) {
                 "success": determineShow,
                 "dataType": "xml",
                 "async": false,
-                "username": localUser,
-                "password": localPassword
+                "username": user,
+                "password": password
             })
         }
         else if (mode === "verify") {
@@ -305,7 +305,7 @@ function malanywhereController(request) {
 
 function insertLogin() {
     malanywhereSendInfo({
-        "message": "set status",
+        "message": "set values",
         "code": -2,
         "values": -2
     });

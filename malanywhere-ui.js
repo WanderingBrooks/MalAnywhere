@@ -17,7 +17,7 @@ function malanywhereUIController(request) {
         }
     }
     // Inject HTML snippet into page
-    else if ( request.message === "set status" ) {
+    else if ( request.message === "set values" ) {
         valuesOnMal = request.values;
         inject();
 
@@ -33,15 +33,15 @@ function malanywhereUIController(request) {
                         "type": "add",
                         "advancedOptions": advancedOptions,
                         "data": {
-                            "episode": document.getElementById("malotg-my_watched_episodes").value,
-                            "status": indexToMalStatus(document.getElementById("malotg-my_status").selectedIndex),
-                            "score": indexToMalScore(document.getElementById("malotg-my_score").selectedIndex),
+                            "episode": document.getElementById("malanywhere-my_watched_episodes").value,
+                            "status": indexToMalStatus(document.getElementById("malanywhere-my_status").selectedIndex),
+                            "score": indexToMalScore(document.getElementById("malanywhere-my_score").selectedIndex),
                             "storage_type": "",
                             "storage_value": "",
                             "times_rewatched": "",
                             "rewatch_value": "",
-                            "date_start": document.getElementById("malotg-my_start_date").value.split("/").join(""),
-                            "date_finish": document.getElementById("malotg-my_finish_date").value.split("/").join(""),
+                            "date_start": document.getElementById("malanywhere-my_start_date").value.split("/").join(""),
+                            "date_finish": document.getElementById("malanywhere-my_finish_date").value.split("/").join(""),
                             "priority": "",
                             "enable_discussion": "",
                             "enable_rewatching": "",
@@ -60,20 +60,20 @@ function malanywhereUIController(request) {
                         "type": "update",
                         "advancedOptions": advancedOptions,
                         "data": {
-                            "episode": document.getElementById("malotg-my_watched_episodes").value,
-                            "status": indexToMalStatus(document.getElementById("malotg-my_status").selectedIndex),
-                            "score": indexToMalScore(document.getElementById("malotg-my_score").selectedIndex),
+                            "episode": document.getElementById("malanywhere-my_watched_episodes").value,
+                            "status": indexToMalStatus(document.getElementById("malanywhere-my_status").selectedIndex),
+                            "score": indexToMalScore(document.getElementById("malanywhere-my_score").selectedIndex),
                             "storage_type": "",
                             "storage_value": "",
                             "times_rewatched": "",
                             "rewatch_value": "",
-                            "date_start":  document.getElementById("malotg-my_start_date").value.split("/").join(""),
-                            "date_finish": document.getElementById("malotg-my_finish_date").value.split("/").join(""),
+                            "date_start":  document.getElementById("malanywhere-my_start_date").value.split("/").join(""),
+                            "date_finish": document.getElementById("malanywhere-my_finish_date").value.split("/").join(""),
                             "priority": "",
                             "enable_discussion": "",
                             "enable_rewatching": "",
                             "comments": "",
-                            "tags": document.getElementById("malotg-my_tags").value
+                            "tags": document.getElementById("malanywhere-my_tags").value
                         },
                         "id": valuesOnMal.series_animedb_id
                     };
@@ -92,60 +92,59 @@ function malanywhereUIController(request) {
                     "data": -1
                 };
                 malanywhereRequest(info);
-                setStatus();
+                setValues();
                 malanywhereUpdateValues();
 
             }
 
             function showAdvancedListener() {
-                if (document.getElementById("malotg-advanced")) {
-                    if (document.getElementById("malotg-advanced").style.displey = "none") {
-                        document.getElementById("malotg-advanced").style.display = "inline";
-                        document.getElementById("malotg-hide-advanced").style.display = "inline";
-                        document.getElementById("malotg-show-advanced").style.display = "none";
+                if (document.getElementById("malanywhere-advanced")) {
+                    if (document.getElementById("malanywhere-advanced").style.displey = "none") {
+                        document.getElementById("malanywhere-advanced").style.display = "inline";
+                        document.getElementById("malanywhere-hide-advanced").style.display = "inline";
+                        document.getElementById("malanywhere-show-advanced").style.display = "none";
                     }
                 }
             }
 
             function hideAdvancedListener() {
-                if (document.getElementById("malotg-advanced")) {
-                    if ( document.getElementById("malotg-advanced").style.displey = "inline") {
-                        document.getElementById("malotg-advanced").style.display = "none";
-                        document.getElementById("malotg-hide-advanced").style.display = "none";
-                        document.getElementById("malotg-show-advanced").style.display = "inline";
+                if (document.getElementById("malanywhere-advanced")) {
+                    if ( document.getElementById("malanywhere-advanced").style.displey = "inline") {
+                        document.getElementById("malanywhere-advanced").style.display = "none";
+                        document.getElementById("malanywhere-hide-advanced").style.display = "none";
+                        document.getElementById("malanywhere-show-advanced").style.display = "inline";
                     }
                 }
             }
 
-            function statusChange() {
-                return document.getElementById("malotg-my_status").selectedIndex != malToIndexStatus(valuesOnMal.my_status) ||
-                    document.getElementById("malotg-my_watched_episodes").value != valuesOnMal.my_watched_episodes ||
-                    document.getElementById("malotg-series_episodes").textContent != valuesOnMal.series_episodes ||
-                    document.getElementById("malotg-my_score").selectedIndex != malToIndexScore(valuesOnMal.my_score) ||
-                    document.getElementById("malotg-my_start_date").value != formatDate(valuesOnMal.my_start_date) ||
-                    document.getElementById("malotg-my_finish_date").value != formatDate(valuesOnMal.my_finish_date) ||
-                    document.getElementById("malotg-my_tags").value != valuesOnMal.my_tags;
+            function valueChange() {
+                return document.getElementById("malanywhere-my_status").selectedIndex != malToIndexStatus(valuesOnMal.my_status) ||
+                    document.getElementById("malanywhere-my_watched_episodes").value != valuesOnMal.my_watched_episodes ||
+                    document.getElementById("malanywhere-my_score").selectedIndex != malToIndexScore(valuesOnMal.my_score) ||
+                    document.getElementById("malanywhere-my_start_date").value != formatDate(valuesOnMal.my_start_date) ||
+                    document.getElementById("malanywhere-my_finish_date").value != formatDate(valuesOnMal.my_finish_date) ||
+                    document.getElementById("malanywhere-my_tags").value != valuesOnMal.my_tags;
             }
 
             function malanywhereUpdateValues() {
-                    valuesOnMal = {
-                        "series_title": valuesOnMal.series_title,
-                        "my_status": indexToMalStatus(document.getElementById("malotg-my_status").selectedIndex),
-                        "my_score": indexToMalScore(document.getElementById("malotg-my_score").selectedIndex),
-                        "series_episodes": valuesOnMal.series_episodes,
-                        "my_watched_episodes": document.getElementById("malotg-my_watched_episodes").value,
-                        "my_start_date": document.getElementById("malotg-my_start_date").value.split("/").join(""),
-                        "my_finish_date": document.getElementById("malotg-my_finish_date").value.split("/").join(""),
-                        "my_tags": document.getElementById("malotg-my_tags").value,
-                        "series_animedb_id": valuesOnMal.series_animedb_id,
-                        "user": valuesOnMal.user,
-                        "password": valuesOnMal.password
-                    }
+                valuesOnMal = {
+                    "series_title": valuesOnMal.series_title,
+                    "my_status": indexToMalStatus(document.getElementById("malanywhere-my_status").selectedIndex),
+                    "my_score": indexToMalScore(document.getElementById("malanywhere-my_score").selectedIndex),
+                    "series_episodes": valuesOnMal.series_episodes,
+                    "my_watched_episodes": document.getElementById("malanywhere-my_watched_episodes").value,
+                    "my_start_date": document.getElementById("malanywhere-my_start_date").value.split("/").join(""),
+                    "my_finish_date": document.getElementById("malanywhere-my_finish_date").value.split("/").join(""),
+                    "my_tags": document.getElementById("malanywhere-my_tags").value,
+                    "series_animedb_id": valuesOnMal.series_animedb_id,
+                    "user": valuesOnMal.user,
+                    "password": valuesOnMal.password
+                }
             }
 
             // This function submits to make sure that no user info is lost before going to myanimelist
             function moreOptionsListener() {
-                if ( statusChange() ) {
+                if ( valueChange() ) {
                     advancedOptions = true;
                     submitListener();
                     advancedOptions = false;
@@ -156,29 +155,29 @@ function malanywhereUIController(request) {
             }
 
             function showLoginListener() {
-                if (document.getElementById("malotg-login")) {
-                    if (document.getElementById("malotg-login").style.displey = "none") {
-                        document.getElementById("malotg-login").style.display = "inline";
-                        document.getElementById("malotg-hide-login").style.display = "inline";
-                        document.getElementById("malotg-show-login").style.display = "none";
+                if (document.getElementById("malanywhere-login")) {
+                    if (document.getElementById("malanywhere-login").style.displey = "none") {
+                        document.getElementById("malanywhere-login").style.display = "inline";
+                        document.getElementById("malanywhere-hide-login").style.display = "inline";
+                        document.getElementById("malanywhere-show-login").style.display = "none";
                     }
                 }
             }
 
             function hideLoginListener() {
-                if (document.getElementById("malotg-login")) {
-                    if ( document.getElementById("malotg-login").style.displey = "inline") {
-                        document.getElementById("malotg-login").style.display = "none";
-                        document.getElementById("malotg-hide-login").style.display = "none";
-                        document.getElementById("malotg-show-login").style.display = "inline";
+                if (document.getElementById("malanywhere-login")) {
+                    if ( document.getElementById("malanywhere-login").style.displey = "inline") {
+                        document.getElementById("malanywhere-login").style.display = "none";
+                        document.getElementById("malanywhere-hide-login").style.display = "none";
+                        document.getElementById("malanywhere-show-login").style.display = "inline";
                     }
                 }
             }
 
-            // Saves the users credentials in chrome local as an object called malotgData
+            // Saves the users credentials in chrome local as an object called malanywhereData
             function saveCredentialsListener() {
-                var username = document.getElementById("malotg-username").value;
-                var password = document.getElementById("malotg-password").value;
+                var username = document.getElementById("malanywhere-username").value;
+                var password = document.getElementById("malanywhere-password").value;
                 var info = {
                     "message": "save credentials",
                     "data": {
@@ -198,7 +197,7 @@ function malanywhereUIController(request) {
 
             // Function that turns the password input from password to txt and vise versa
             function togglePassword(){
-                var password = document.getElementById("malotg-password");
+                var password = document.getElementById("malanywhere-password");
                 if (password.type == "password") {
                     password.setAttribute('type', 'text');
                 }
@@ -207,103 +206,92 @@ function malanywhereUIController(request) {
                 }
             }
 
-            $("#malotg-submit").on("click", submitListener);
-            $("#malotg-delete").on("click", deleteListener);
-            $("#malotg-show-advanced").on("click", showAdvancedListener);
-            $("#malotg-hide-advanced").on("click", hideAdvancedListener);
-            $("#malotg-more-options").on("click", moreOptionsListener);
-            $("#malotg-hide-login").on("click", hideLoginListener);
-            $("#malotg-show-login").on("click", showLoginListener);
-            $("#malotg-in").on("click", saveCredentialsListener);
-            $("#malotg-out").on("click", deleteCredentialsListener);
-            $("#malotg-showhide-password").on("click", togglePassword);
+            $("#malanywhere-submit").on("click", submitListener);
+            $("#malanywhere-delete").on("click", deleteListener);
+            $("#malanywhere-show-advanced").on("click", showAdvancedListener);
+            $("#malanywhere-hide-advanced").on("click", hideAdvancedListener);
+            $("#malanywhere-more-options").on("click", moreOptionsListener);
+            $("#malanywhere-hide-login").on("click", hideLoginListener);
+            $("#malanywhere-show-login").on("click", showLoginListener);
+            $("#malanywhere-in").on("click", saveCredentialsListener);
+            $("#malanywhere-out").on("click", deleteCredentialsListener);
+            $("#malanywhere-showhide-password").on("click", togglePassword);
 
 
 
 
         }
 
-        function setStatus() {
+        function setValues() {
             if (request.code == -2) {
-                document.getElementById("malotg-values").style.display = "none";
-                document.getElementById("malotg-login").style.display = "inline";
-                document.getElementById("malotg-show-login").style.display = "none";
-                document.getElementById("malotg-hide-login").style.display = "inline";
-                document.getElementById("malotg-in").style.display = "inline";
-                document.getElementById("malotg-out").style.display = "none";
+                document.getElementById("malanywhere-values").style.display = "none";
+                document.getElementById("malanywhere-login").style.display = "inline";
+                document.getElementById("malanywhere-show-login").style.display = "none";
+                document.getElementById("malanywhere-hide-login").style.display = "inline";
+                document.getElementById("malanywhere-in").style.display = "inline";
+                document.getElementById("malanywhere-out").style.display = "none";
             }
             else if (request.code == -1) {
-                document.getElementById("malotg-values").style.display = "inline";
-                document.getElementById("malotg-login").style.display = "none";
-                document.getElementById("malotg-show-login").style.display = "inline";
-                document.getElementById("malotg-hide-login").style.display = "none";
-                document.getElementById("malotg-in").style.display = "none";
-                document.getElementById("malotg-out").style.display = "inline";
-                document.getElementById("malotg-series_title").textContent = "Anime Not Found";
-                document.getElementById("malotg-series_title").href = "https://myanimelist.net/" + "404" + "/";
-                document.getElementById("malotg-my_status").disabled = true;
-                document.getElementById("malotg-my_watched_episodes").disabled = true;
-                document.getElementById("malotg-my_score").disabled = true;
-                document.getElementById("malotg-my_finish_date").disabled = true;
-                document.getElementById("malotg-my_start_date").disabled = true;
-                document.getElementById("malotg-my_tags").disabled = true;
-                document.getElementById("malotg-more-options").disabled = true;
-                document.getElementById("malotg-submit").disabled = true;
-                document.getElementById("malotg-delete").disabled = true;
-                document.getElementById("malotg-username").value = valuesOnMal.user;
-                document.getElementById("malotg-password").value = valuesOnMal.password;
+                document.getElementById("malanywhere-values").style.display = "inline";
+                document.getElementById("malanywhere-login").style.display = "none";
+                document.getElementById("malanywhere-show-login").style.display = "inline";
+                document.getElementById("malanywhere-hide-login").style.display = "none";
+                document.getElementById("malanywhere-in").style.display = "none";
+                document.getElementById("malanywhere-out").style.display = "inline";
+                document.getElementById("malanywhere-series_title").textContent = "Anime Not Found";
+                document.getElementById("malanywhere-series_title").href = "https://myanimelist.net/" + "404" + "/";
+                document.getElementById("malanywhere-my_status").disabled = true;
+                document.getElementById("malanywhere-my_watched_episodes").disabled = true;
+                unknownEpisodes();
+                document.getElementById("malanywhere-my_score").disabled = true;
+                document.getElementById("malanywhere-my_finish_date").disabled = true;
+                document.getElementById("malanywhere-my_start_date").disabled = true;
+                document.getElementById("malanywhere-my_tags").disabled = true;
+                document.getElementById("malanywhere-more-options").disabled = true;
+                document.getElementById("malanywhere-submit").disabled = true;
+                document.getElementById("malanywhere-delete").disabled = true;
+                document.getElementById("malanywhere-username").value = valuesOnMal.user;
+                document.getElementById("malanywhere-password").value = valuesOnMal.password;
             }
             else if (request.code == 0) {
-                if (request.series_episodes == 0) {
-                    request.series_episodes = "?"
-                }
-                else {
-                    document.getElementById("malotg-my_watched_episodes").max = request.series_episodes;
-                }
-                document.getElementById("malotg-values").style.display = "inline";
-                document.getElementById("malotg-login").style.display = "none";
-                document.getElementById("malotg-show-login").style.display = "inline";
-                document.getElementById("malotg-hide-login").style.display = "none";
-                document.getElementById("malotg-in").style.display = "none";
-                document.getElementById("malotg-out").style.display = "inline";
-                document.getElementById("malotg-series_title").textContent = valuesOnMal.series_title;
-                document.getElementById("malotg-series_title").href = "https://myanimelist.net/anime/" + valuesOnMal.series_animedb_id + "/" ;
-                document.getElementById("malotg-my_status").selectedIndex = 0;
-                document.getElementById("malotg-my_watched_episodes").value = 0;
-                document.getElementById("malotg-series_episodes").textContent = valuesOnMal.series_episodes;
-                document.getElementById("malotg-my_score").selectedIndex = 0;
-                document.getElementById("malotg-my_start_date").value = "";
-                document.getElementById("malotg-my_finish_date").value = "";
-                document.getElementById("malotg-my_tags").value = "";
-                document.getElementById("malotg-more-options").href = "https://myanimelist.net/ownlist/anime/" + valuesOnMal.series_animedb_id + "/edit";
-                document.getElementById("malotg-username").value = valuesOnMal.user;
-                document.getElementById("malotg-password").value = valuesOnMal.password;
+                document.getElementById("malanywhere-values").style.display = "inline";
+                document.getElementById("malanywhere-login").style.display = "none";
+                document.getElementById("malanywhere-show-login").style.display = "inline";
+                document.getElementById("malanywhere-hide-login").style.display = "none";
+                document.getElementById("malanywhere-in").style.display = "none";
+                document.getElementById("malanywhere-out").style.display = "inline";
+                document.getElementById("malanywhere-series_title").textContent = valuesOnMal.series_title;
+                document.getElementById("malanywhere-series_title").href = "https://myanimelist.net/anime/" + valuesOnMal.series_animedb_id + "/" ;
+                document.getElementById("malanywhere-my_status").selectedIndex = 0;
+                document.getElementById("malanywhere-my_watched_episodes").value = 0;
+                unknownEpisodes();
+                document.getElementById("malanywhere-my_score").selectedIndex = 0;
+                document.getElementById("malanywhere-my_start_date").value = "";
+                document.getElementById("malanywhere-my_finish_date").value = "";
+                document.getElementById("malanywhere-my_tags").value = "";
+                document.getElementById("malanywhere-more-options").href = "https://myanimelist.net/ownlist/anime/" + valuesOnMal.series_animedb_id + "/edit";
+                document.getElementById("malanywhere-username").value = valuesOnMal.user;
+                document.getElementById("malanywhere-password").value = valuesOnMal.password;
             }
             else if (request.code == 1) {
-                if (valuesOnMal.series_episodes == 0) {
-                    valuesOnMal.series_episodes = "?"
-                }
-                else {
-                    document.getElementById("malotg-my_watched_episodes").max = valuesOnMal.series_episodes;
-                }
-                document.getElementById("malotg-values").style.display = "inline";
-                document.getElementById("malotg-login").style.display = "none";
-                document.getElementById("malotg-show-login").style.display = "inline";
-                document.getElementById("malotg-hide-login").style.display = "none";
-                document.getElementById("malotg-in").style.display = "none";
-                document.getElementById("malotg-out").style.display = "inline";
-                document.getElementById("malotg-series_title").textContent = valuesOnMal.series_title;
-                document.getElementById("malotg-series_title").href = "https://myanimelist.net/anime/" + valuesOnMal.series_animedb_id + "/" ;
-                document.getElementById("malotg-my_status").selectedIndex = malToIndexStatus(valuesOnMal.my_status);
-                document.getElementById("malotg-my_watched_episodes").value = valuesOnMal.my_watched_episodes;
-                document.getElementById("malotg-series_episodes").textContent = valuesOnMal.series_episodes;
-                document.getElementById("malotg-my_score").selectedIndex = malToIndexScore(valuesOnMal.my_score);
-                document.getElementById("malotg-my_start_date").value = formatDate(valuesOnMal.my_start_date);
-                document.getElementById("malotg-my_finish_date").value = formatDate(valuesOnMal.my_finish_date);
-                document.getElementById("malotg-my_tags").value = valuesOnMal.my_tags;
-                document.getElementById("malotg-more-options").href = "https://myanimelist.net/ownlist/anime/" + valuesOnMal.series_animedb_id + "/edit";
-                document.getElementById("malotg-username").value = valuesOnMal.user;
-                document.getElementById("malotg-password").value = valuesOnMal.password;
+                document.getElementById("malanywhere-values").style.display = "inline";
+                document.getElementById("malanywhere-login").style.display = "none";
+                document.getElementById("malanywhere-show-login").style.display = "inline";
+                document.getElementById("malanywhere-hide-login").style.display = "none";
+                document.getElementById("malanywhere-in").style.display = "none";
+                document.getElementById("malanywhere-out").style.display = "inline";
+                document.getElementById("malanywhere-series_title").textContent = valuesOnMal.series_title;
+                document.getElementById("malanywhere-series_title").href = "https://myanimelist.net/anime/" + valuesOnMal.series_animedb_id + "/" ;
+                document.getElementById("malanywhere-my_status").selectedIndex = malToIndexStatus(valuesOnMal.my_status);
+                document.getElementById("malanywhere-my_watched_episodes").value = valuesOnMal.my_watched_episodes;
+                unknownEpisodes();
+                document.getElementById("malanywhere-my_score").selectedIndex = malToIndexScore(valuesOnMal.my_score);
+                document.getElementById("malanywhere-my_start_date").value = formatDate(valuesOnMal.my_start_date);
+                document.getElementById("malanywhere-my_finish_date").value = formatDate(valuesOnMal.my_finish_date);
+                document.getElementById("malanywhere-my_tags").value = valuesOnMal.my_tags;
+                document.getElementById("malanywhere-more-options").href = "https://myanimelist.net/ownlist/anime/" + valuesOnMal.series_animedb_id + "/edit";
+                document.getElementById("malanywhere-username").value = valuesOnMal.user;
+                document.getElementById("malanywhere-password").value = valuesOnMal.password;
             }
         }
 
@@ -316,13 +304,13 @@ function malanywhereUIController(request) {
                     request.injectLocation(div);
                     document.getElementById("malanywhere").style.display = "none";
                     createListeners();
-                    setStatus();
+                    setValues();
                     $(function () {
-                        $("#malotg-my_start_date").datepicker({
+                        $("#malanywhere-my_start_date").datepicker({
                             changeMonth: true,
                             changeYear: true
                         });
-                        $("#malotg-my_finish_date").datepicker({
+                        $("#malanywhere-my_finish_date").datepicker({
                             changeMonth: true,
                             changeYear: true
                         });
@@ -331,7 +319,7 @@ function malanywhereUIController(request) {
                 });
             }
             else {
-                setStatus();
+                setValues();
                 document.getElementById("malanywhere").style.display = "inline";
             }
 
@@ -347,9 +335,9 @@ function malanywhereUIController(request) {
             if (request.code == -1) {
                 sendTitles();
             }
-            document.getElementById("malotg-info").textContent = request.text;
+            document.getElementById("malanywhere-info").textContent = request.text;
             setTimeout(function() {
-                document.getElementById('malotg-info').textContent = 'MalOnTheGo';
+                document.getElementById('malanywhere-info').textContent = 'MalOnTheGo';
             }, 1000);
         }
     }
@@ -413,8 +401,17 @@ function malanywhereUIController(request) {
         }
     }
 
+    /*If there are an unknown number of episodes because the show is airing MAL stores
+     * a 0 as the total number of episodes this checks if that is the case*/
+    function unknownEpisodes() {
+        if (valuesOnMal.series_episodes == 0 || valuesOnMal.series_episodes === "") {
+            document.getElementById("malanywhere-series_episodes").textContent = "?"
+        }
+        else {
+            document.getElementById("malanywhere-my_watched_episodes").max = valuesOnMal.series_episodes;
+            document.getElementById("malanywhere-series_episodes").textContent = valuesOnMal.series_episodes;
+
+        }
+    }
+
 }
-
-
-
-
