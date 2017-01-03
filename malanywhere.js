@@ -1,4 +1,14 @@
+/* Controller for the backend of malanywere has 5 specific message inputs
+ 1. get info: given titles first search the mal api for the show id then using that see if the user already has
+ that show on their list then depending on the answer send a different code and info to the front end
+ 2. AUD: Either add update or delete the given anime from the users list depending on the given type
+ 3. save credentials: This first verifies that the given credentials are valid through the mal api, if they are valid
+ it delegates to the developer to save them if they are not it tells the user to try again
+ 4. delete credentials: Delegates to the developer to delete the users credentials
+ 5. send login: sends the code to the front end saying that the user isn't logged in
+ */
 function malanywhereController(request) {
+    // Declares a local copy of the username and password
     var user;
     var password;
     if (request.message === "get info") {
@@ -7,15 +17,15 @@ function malanywhereController(request) {
         var expectedCount = request.data.titles.length;
         var activeCount = 0;
         var results = [];
+        // Get the users credentials, update the local copy, and search mal for the titles
         malanywhereGetCredentials(
             function (u, p) {
                 user = u;
                 password = p;
                 malanywhereSearch(u, p);
-            });
-
+            }, request);
+        // Does a search of mal for every given title
         function malanywhereSearch(user, password) {
-            // Do a search for every title given to maximize the chance of getting a hit
             for (var i = 0; i < request.data.titles.length; i++) {
                 sendRequest("search", request.data.titles[i], -1, user, password);
             }
@@ -137,7 +147,7 @@ function malanywhereController(request) {
                             "user": user,
                             "password": password
                         }
-                    });
+                    }, request);
                 }
                 // If it wasn't found in the users list send the information we have to be displayed allows updating
                 else {
@@ -157,7 +167,7 @@ function malanywhereController(request) {
                             "user": user,
                             "password": password
                         }
-                    });
+                    }, request);
                 }
             }
 
@@ -182,26 +192,44 @@ function malanywhereController(request) {
                     "user": user,
                     "password": password
                 }
-            });
+            }, request);
         }
 
     }
-
+    // Fix this don't send stuff we have it already
     else if (request.message === "AUD") {
         sendRequest(request.type, request.data, request.id);
     }
 
     else if (request.message === "save credentials") {
-        sendRequest("verify", request.data, -1, request.data.user, request.data.password);
+        user = request.data.user;
+        password = request.data.password;
+        sendRequest("verify", request.data, -1);
     }
 
     else if (request.message === "delete credentials") {
-        malanywhereDeleteCredentials();
+        malanywhereDeleteCredentials(request);
     }
 
-    // Function that contains all the ajaxes differentiate between them with the variable mode
+    else if (request.message === "send login") {
+        malanywhereSendInfo({
+            "message": "set values",
+            "code": -2,
+            "values": -2
+        }, request);
+    }
+
+    /* Function that contains all the ajaxes differentiate between them with the variable mode
+     Options: 1. add
+     2. update
+     3. delete
+     4. user values
+     5. search
+     6. verify
+     */
     function sendRequest(mode, data, id) {
         if (mode == "add") {
+            // Creates an xml representation of the object based on the mal api standard
             var xml = objectToXML(data, "entry");
             var xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + new XMLSerializer().serializeToString(xml);
             $.ajax({
@@ -215,6 +243,7 @@ function malanywhereController(request) {
             });
         }
         else if (mode == "update") {
+            // Creates an xml representation of the object based on the mal api standard
             var xml = objectToXML(data, "entry");
             var xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + new XMLSerializer().serializeToString(xml);
             $.ajax({
@@ -242,8 +271,7 @@ function malanywhereController(request) {
                 "url": "http://myanimelist.net/malappinfo.php",
                 "data": {"u": user, "status": "all", "type": "anime"},
                 "success": findAnimeCreator(id, data.title, data.episodes),
-                "dataType": "xml",
-                "error": userFail
+                "dataType": "xml"
             });
         }
         else if (mode == "search") {
@@ -261,20 +289,19 @@ function malanywhereController(request) {
             $.ajax({
                 "url": "https://myanimelist.net/api/account/verify_credentials.xml",
                 "error": getInfo,
-                "username": data.user,
-                "password": data.password,
-                "success": malanywhereSaveCredentials(data.user, data.password)
+                "username": user,
+                "password": password,
+                "success": malanywhereSaveCredentials(user, password, request)
             });
         }
-
+        // Gets the text from the xhr and sends it to be displayed at the front end
         function getInfo(data, textStatus, jqXHR) {
             malanywhereSendInfo({
                 "message": "information update",
                 "data": {"id": id},
                 "code": 2,
-                "advancedOptions": request.advancedOptions,
                 "text": jqXHR.responseText
-            });
+            }, request);
         }
 
     }
@@ -296,19 +323,6 @@ function malanywhereController(request) {
         return xmlDoc;
     }
 
-    // Tells the user to email me because something went wrong
-    function userFail() {
-        alert("An error occurred getting your user values please email cs.jasonbrooks@gmail.com");
-    }
-
-}
-
-function insertLogin() {
-    malanywhereSendInfo({
-        "message": "set values",
-        "code": -2,
-        "values": -2
-    });
 }
 
 

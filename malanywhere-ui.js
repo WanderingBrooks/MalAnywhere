@@ -1,9 +1,13 @@
-/**
- * Created by Jason on 12/8/2016.
- */
 
+/*Controller for the UI of the malanywhere depending on the given requests message field 3 different things
+ * will happen
+ * 1. show hide: the malanywhere html is hidden so the page looks as it would without the api
+ * 2. set values: this will inject the respective html based on a code given by the back end the codes are described
+ *    above the setValues function
+ * 3. information update: if the user modified the item from the current page this will alert them that a change was successful
+ * */
 function malanywhereUIController(request) {
-    var valuesOnMal;
+
     if( request.message === ("show hide") ) {
         // does the Element actually exist
         if (document.getElementById("malanywhere")) {
@@ -21,17 +25,50 @@ function malanywhereUIController(request) {
         valuesOnMal = request.values;
         inject();
 
+        // Injects the html from the request into the request location given by the developer
+        function inject() {
+            // Has it already been injected
+            if (!(document.getElementById("malanywhere"))) {
+                advancedOptions = false;
+                // If not inject into page
+                var div = document.createElement("div");
+                div.id = "malanywhere";
+                $.get(request.fileLocation, function (data) {
+                    div.innerHTML = data;
+                    request.injectLocation(div);
+                    document.getElementById("malanywhere").style.display = "none";
+                    createListeners();
+                    setValues();
+                    $(function () {
+                        $("#malanywhere-my_start_date").datepicker({
+                            changeMonth: true,
+                            changeYear: true
+                        });
+                        $("#malanywhere-my_finish_date").datepicker({
+                            changeMonth: true,
+                            changeYear: true
+                        });
+                    });
+                    document.getElementById("malanywhere").style.display = "inline";
+                });
+            }
+            // If its already been injected update the values
+            else {
+                setValues();
+                document.getElementById("malanywhere").style.display = "inline";
+            }
+        }
+        // Creates the listeners for each clickable element in the malanywhere-snipet.html file
         function createListeners() {
-            var advancedOptions = false;
 
+            // Sends the info stored in malanywhere's fields to the backend to be sent to mal
             function submitListener() {
-
+                // If it isn't on mal already it needs to be added
                 if (request.code === 0) {
                     request.code = 1;
                     var info = {
                         "message": "AUD",
                         "type": "add",
-                        "advancedOptions": advancedOptions,
                         "data": {
                             "episode": document.getElementById("malanywhere-my_watched_episodes").value,
                             "status": indexToMalStatus(document.getElementById("malanywhere-my_status").selectedIndex),
@@ -50,15 +87,14 @@ function malanywhereUIController(request) {
                         },
                         "id": valuesOnMal.series_animedb_id
                     };
-                    malanywhereRequest(info);
+                    malanywhereRequest(info, request);
                     malanywhereUpdateValues();
                 }
-
+                // If the user has values already it need to be updated
                 else if (request.code === 1) {
                     var info = {
                         "message": "AUD",
                         "type": "update",
-                        "advancedOptions": advancedOptions,
                         "data": {
                             "episode": document.getElementById("malanywhere-my_watched_episodes").value,
                             "status": indexToMalStatus(document.getElementById("malanywhere-my_status").selectedIndex),
@@ -77,12 +113,12 @@ function malanywhereUIController(request) {
                         },
                         "id": valuesOnMal.series_animedb_id
                     };
-                    malanywhereRequest(info);
+                    malanywhereRequest(info, request);
                     malanywhereUpdateValues();
                 }
 
             }
-
+            // To delete the anime off the users list
             function deleteListener() {
                 request.code = 0;
                 var info = {
@@ -91,12 +127,13 @@ function malanywhereUIController(request) {
                     "id": valuesOnMal.series_animedb_id,
                     "data": -1
                 };
-                malanywhereRequest(info);
+                malanywhereRequest(info, request);
+                // The code is changed and the values are set to be default
                 setValues();
                 malanywhereUpdateValues();
 
             }
-
+            // Hide the Advanced options section of the malanywhere-snipet.html
             function showAdvancedListener() {
                 if (document.getElementById("malanywhere-advanced")) {
                     if (document.getElementById("malanywhere-advanced").style.displey = "none") {
@@ -106,7 +143,7 @@ function malanywhereUIController(request) {
                     }
                 }
             }
-
+            // Show the Advanced options section of the malanywhere-snipet.html
             function hideAdvancedListener() {
                 if (document.getElementById("malanywhere-advanced")) {
                     if ( document.getElementById("malanywhere-advanced").style.displey = "inline") {
@@ -116,7 +153,7 @@ function malanywhereUIController(request) {
                     }
                 }
             }
-
+            // Are the values currently on mal different then the ones in the fields here
             function valueChange() {
                 return document.getElementById("malanywhere-my_status").selectedIndex != malToIndexStatus(valuesOnMal.my_status) ||
                     document.getElementById("malanywhere-my_watched_episodes").value != valuesOnMal.my_watched_episodes ||
@@ -125,7 +162,7 @@ function malanywhereUIController(request) {
                     document.getElementById("malanywhere-my_finish_date").value != formatDate(valuesOnMal.my_finish_date) ||
                     document.getElementById("malanywhere-my_tags").value != valuesOnMal.my_tags;
             }
-
+            // Update the local copy of what is stored of mal
             function malanywhereUpdateValues() {
                 valuesOnMal = {
                     "series_title": valuesOnMal.series_title,
@@ -142,18 +179,18 @@ function malanywhereUIController(request) {
                 }
             }
 
-            // This function submits to make sure that no user info is lost before going to myanimelist
+            // This function opens options not supported on the mal api on the mal website
             function moreOptionsListener() {
+                // If the user has changed the values before going to mal those should be updated
                 if ( valueChange() ) {
                     advancedOptions = true;
                     submitListener();
-                    advancedOptions = false;
                 }
                 else {
                     openEditPage(valuesOnMal.series_animedb_id);
                 }
             }
-
+            // Shows the login field of the malannywhere-snipet.html file
             function showLoginListener() {
                 if (document.getElementById("malanywhere-login")) {
                     if (document.getElementById("malanywhere-login").style.displey = "none") {
@@ -163,7 +200,7 @@ function malanywhereUIController(request) {
                     }
                 }
             }
-
+            // Hides the login field of the malannywhere-snipet.html file
             function hideLoginListener() {
                 if (document.getElementById("malanywhere-login")) {
                     if ( document.getElementById("malanywhere-login").style.displey = "inline") {
@@ -174,7 +211,7 @@ function malanywhereUIController(request) {
                 }
             }
 
-            // Saves the users credentials in chrome local as an object called malanywhereData
+            // Sends the credentials to be saved bu the developer
             function saveCredentialsListener() {
                 var username = document.getElementById("malanywhere-username").value;
                 var password = document.getElementById("malanywhere-password").value;
@@ -185,17 +222,17 @@ function malanywhereUIController(request) {
                         "password": password
                     }
                 };
-                malanywhereRequest(info);
+                malanywhereRequest(info, request);
             }
-
+            // Clear credentials stored for the user
             function deleteCredentialsListener() {
                 var info = {
                     "message": "delete credentials"
                 };
-                malanywhereRequest(info);
+                malanywhereRequest(info, request);
             }
 
-            // Function that turns the password input from password to txt and vise versa
+            // Function that turns the password input from password to text and vise versa
             function togglePassword(){
                 var password = document.getElementById("malanywhere-password");
                 if (password.type == "password") {
@@ -205,7 +242,7 @@ function malanywhereUIController(request) {
                     password.setAttribute('type', 'password');
                 }
             }
-
+            // Sets up the listeners for all the button and their respective functions
             $("#malanywhere-submit").on("click", submitListener);
             $("#malanywhere-delete").on("click", deleteListener);
             $("#malanywhere-show-advanced").on("click", showAdvancedListener);
@@ -221,8 +258,16 @@ function malanywhereUIController(request) {
 
 
         }
-
+        /*
+         Sets the fields of the created to div
+         Code Table:
+         -2: Insert Login hide everything else
+         -1: Insert Error show not found
+         0: Anime found but user does not have it on their list
+         1: Anime is on Mal and the user has values already stored
+         */
         function setValues() {
+            // Hide everything except the login field
             if (request.code == -2) {
                 document.getElementById("malanywhere-values").style.display = "none";
                 document.getElementById("malanywhere-login").style.display = "inline";
@@ -232,6 +277,8 @@ function malanywhereUIController(request) {
                 document.getElementById("malanywhere-out").style.display = "none";
             }
             else if (request.code == -1) {
+                // Make the values field visible hide the login
+                // disabled everything  show wasn't found
                 document.getElementById("malanywhere-values").style.display = "inline";
                 document.getElementById("malanywhere-login").style.display = "none";
                 document.getElementById("malanywhere-show-login").style.display = "inline";
@@ -254,6 +301,8 @@ function malanywhereUIController(request) {
                 document.getElementById("malanywhere-password").value = valuesOnMal.password;
             }
             else if (request.code == 0) {
+                // Make the values field visible hide login
+                // set all the user changeable fields to default, and the set the fields that are not changeable
                 document.getElementById("malanywhere-values").style.display = "inline";
                 document.getElementById("malanywhere-login").style.display = "none";
                 document.getElementById("malanywhere-show-login").style.display = "inline";
@@ -274,6 +323,8 @@ function malanywhereUIController(request) {
                 document.getElementById("malanywhere-password").value = valuesOnMal.password;
             }
             else if (request.code == 1) {
+                // Make the values fields visible
+                // set the vields to what the user has stored on mal
                 document.getElementById("malanywhere-values").style.display = "inline";
                 document.getElementById("malanywhere-login").style.display = "none";
                 document.getElementById("malanywhere-show-login").style.display = "inline";
@@ -295,45 +346,18 @@ function malanywhereUIController(request) {
             }
         }
 
-        function inject() {
-            if (!(document.getElementById("malanywhere"))) {
-                var div = document.createElement("div");
-                div.id = "malanywhere";
-                $.get(request.fileLocation, function (data) {
-                    div.innerHTML = data;
-                    request.injectLocation(div);
-                    document.getElementById("malanywhere").style.display = "none";
-                    createListeners();
-                    setValues();
-                    $(function () {
-                        $("#malanywhere-my_start_date").datepicker({
-                            changeMonth: true,
-                            changeYear: true
-                        });
-                        $("#malanywhere-my_finish_date").datepicker({
-                            changeMonth: true,
-                            changeYear: true
-                        });
-                    });
-                    document.getElementById("malanywhere").style.display = "inline";
-                });
-            }
-            else {
-                setValues();
-                document.getElementById("malanywhere").style.display = "inline";
-            }
 
-
-        }
 
     }
-    else if ( request.message === "information update") {
+    // Update malanywhere-info and check advanced options
+    else if ( request.message === "information update" ) {
         if (document.getElementById("malanywhere")) {
-            if (request.advancedOptions) {
+            if (advancedOptions) {
                 openEditPage(request.data.id);
+                advancedOptions = false;
             }
             if (request.code == -1) {
-                sendTitles();
+                malanywhereSendTitles(request);
             }
             document.getElementById("malanywhere-info").textContent = request.text;
             setTimeout(function() {
@@ -341,7 +365,15 @@ function malanywhereUIController(request) {
             }, 1000);
         }
     }
-
+    // Keep them in the scope but do not initialize the variables every time malanywhereUIController is called
+    else if ( request.message === "initialize" ) {
+        // Local copy of the values for this anime stored on myanimelist
+        var valuesOnMal;
+        // If the user pressed the advance options button this tells the submit listener to update before going to
+        // the mal website
+        var advancedOptions;
+    }
+    // Open the edit page for the given anime id
     function openEditPage(id) {
         window.open("https://myanimelist.net/ownlist/anime/" + id  +"/edit", '_blank');
     }
