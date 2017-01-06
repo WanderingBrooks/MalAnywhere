@@ -5,5 +5,5 @@ A Web Api that can be used to adjust a users myanimelist based off of the websit
 and returns the users values in an object to be displayed by the the frontend.
 
 
-[malanywhere-ui.js](https://github.com/WanderingBrooks/MalAnywhere/blob/master/malanywhere-ui.js)
+[malanywhere-ui.js](https://github.com/WanderingBrooks/MalAnywhere/blob/master/malanywhere-ui.js) is the front end of the api taking in data from the backend and displyaing it where the developer specifies.
  
