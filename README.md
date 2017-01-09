@@ -9,7 +9,6 @@ and returns the users values in an object to be displayed by the the frontend.
 
 ## Interfacing with the backend
 The Api itself will handel getting the necessary user information, what it cannot do itself is communicate with the front end, or interact with user credentials. This must be handeled by the developer implementing this api into thier website. As to keep the api generic interacting with user crednetials and sending and receving info is left ot the developer.
-[Receiving a request](#Receiving-a-request)
  
  What needs to be tied together:
  * [Receiving a request](#Receiving-a-request) and sending it to the backend using the function malanywhereController 
@@ -19,7 +18,6 @@ The Api itself will handel getting the necessary user information, what it canno
  * Sending info to the front end by defining malanywhereSendInfo
  
 ## Receiving a request
-hhhhhh
  
  
 
