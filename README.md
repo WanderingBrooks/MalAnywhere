@@ -14,19 +14,40 @@ and returns the users values in an object to be displayed by the the frontend.
  malanywhereVerifyCredentials(username, password, error, success)
   Verifys the given crednetials and calles the success parameter if the credentials are correct and the error parameter if the ajax fails
   
-  | Type       |        |                            |
+  | Type       | Name       | Description            |
   |------------|--------|----------------------------|
-  |   String   |Username|The Username to be verified |
-  |   String   |Password|The Password to be verified |
+  |   String   |username|The Username to be verified |
+  |   String   |password|The Password to be verified |
   |   Function |  error |Callback function if the ajax fails the function is passed [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR), a String textStatus, and a String errorThrown|
   |   Function | success|Callback function if the ajax is succesful its passed a String data, a String textStatus, and a [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR)|
   
   
- ## malanywhereGetInfo
+  ## malanywhereGetInfo
+  malanywhereGetInfo(titles, username, password, callback)
+   Given an array of titles this function will return users myanimelist values the credentials are verified before 
+   
+  |Type              | Name     | Description                                                |
+  |------------------|----------|------------------------------------------------------------|
+  | Array of strings | titles   | The order of titles determines which will be checked first |                                             | String           | username | The users list that should be checked                      |
+  | String           | password | the password for the users list to be checked              |
+  | Function         | callback | callback function thats passed a JavaScript Object refer to the [code table](#Code-table) to see the possible paramters that will be passed to the function |  
  
+ ## Code table
+ the callback function will receive an object with 6 fields 
+ * code 
+ * animeValues 
+ * userValues 
+ * jqXHR 
+ * textStatus 
+ * errorThrown
  
- 
- 
+ |Code |Description                                                                       |
+ |-----|----------------------------------------------------------------------------------|
+ | -3  | Some other error besides invalid crednetials went wrong when performing an ajax  |
+ | -2  | The given credentials were not valid                                             |
+ | -1  | The given titles did not match any listing on myanimelist                        |
+ |  0  | The anime is on myanimelist but the show is not on the users list                |
+ |  1  | The anime is on myanimelist and the show is on the users list                    |
 
 
  
