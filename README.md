@@ -7,7 +7,7 @@ and returns the users values in an object to be displayed by the the frontend.
 ##Interfacing with the API
  The api has two functions 
  * [malanywhereVerifyCredentials](#malanywhereVerifyCredentials) 
- * [malanywhereGetInfo](##malanywhereGetInfo)
+ * [malanywhereGetInfo](#malanywhereGetInfo)
  
  
  ##malanywhereVerifyCredentials
