@@ -13,7 +13,8 @@ and returns the users values in an object to be displayed by the the frontend.
  ## malanywhereVerifyCredentials
  malanywhereVerifyCredentials(username, password, error, success)
   Verifys the given crednetials and calles the success parameter if the credentials are correct and the error parameter if the ajax fails
-  | Type | Name        | Description                            |
+  
+  | Type       |        |                            |
   |------------|--------|----------------------------|
   |   String   |Username|The Username to be verified |
   |   String   |Password|The Password to be verified |
