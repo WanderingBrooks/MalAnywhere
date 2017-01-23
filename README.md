@@ -41,6 +41,8 @@ and returns the users values in an object to be displayed by the the frontend.
  * textStatus 
  * errorThrown
  
+ If one of the fields other than code is = -1 that means for that specific code the information is irrelavent or not obtainable
+ 
  |Code |Description                                                                       |
  |-----|----------------------------------------------------------------------------------|
  | -3  | Some other error besides invalid crednetials went wrong when performing an ajax  |
