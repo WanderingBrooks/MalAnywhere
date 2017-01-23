@@ -13,12 +13,12 @@ and returns the users values in an object to be displayed by the the frontend.
  ## malanywhereVerifyCredentials
  malanywhereVerifyCredentials(username, password, error, success)
   Verifys the given crednetials and calles the success parameter if the credentials are correct and the error parameter if the ajax fails
-  | Parameters |        |                            |
+  | Type | Name        | Description                            |
   |------------|--------|----------------------------|
   |   String   |Username|The Username to be verified |
   |   String   |Password|The Password to be verified |
-  |   Function |  error |Callback function if the ajax fails the function is passed [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR), a String textStatus, and a String errorThrown          |
-  |   Function | success|Callback function if the ajax is succesful its passed a String data, a String textStatus, and a [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR)           |
+  |   Function |  error |Callback function if the ajax fails the function is passed [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR), a String textStatus, and a String errorThrown|
+  |   Function | success|Callback function if the ajax is succesful its passed a String data, a String textStatus, and a [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR)|
   
   
  ## malanywhereGetInfo
