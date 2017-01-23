@@ -18,7 +18,7 @@ and returns the users values in an object to be displayed by the the frontend.
   |------------|--------|----------------------------|
   |   String   |username|The Username to be verified |
   |   String   |password|The Password to be verified |
-  |   Function |  error |Callback function if the ajax fails the function is passed [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR), a String textStatus, and a String errorThrown|
+  |   Function |  error |Callback function if the ajax fails the function is passed a [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR), a String textStatus, and a String errorThrown|
   |   Function | success|Callback function if the ajax is succesful its passed a String data, a String textStatus, and a [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR)|
   
   
@@ -28,7 +28,8 @@ and returns the users values in an object to be displayed by the the frontend.
    
   |Type              | Name     | Description                                                |
   |------------------|----------|------------------------------------------------------------|
-  | Array of strings | titles   | The order of titles determines which will be checked first |                                             | String           | username | The users list that should be checked                      |
+  | Array of strings | titles   | Posisble titles to compare to shows listed on myaniemlist the order of titles determines which will be checked first |                                             
+  | String           | username | The users list that should be checked                      |
   | String           | password | the password for the users list to be checked              |
   | Function         | callback | callback function thats passed a JavaScript Object refer to the [code table](#code-table) to see the possible paramters that will be passed to the function |  
  
