@@ -10,7 +10,7 @@ and returns the users values in an object to be displayed by the the frontend.
  * [malanywhereGetInfo](#malanywhereGetInfo)
  
  
- ##malanywhereVerifyCredentials
+ #malanywhereVerifyCredentials
  malanywhereVerifyCredentials(username, password, error, success)
   Verifys the given crednetials and calles the success parameter if the credentials are correct and the error parameter if the ajax fails
   
@@ -22,7 +22,7 @@ and returns the users values in an object to be displayed by the the frontend.
   |   Function | success|Callback function if the ajax is succesful its passed a String data, a String textStatus, and a [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR)|
   
   
-  ##malanywhereGetInfo
+  #malanywhereGetInfo
   malanywhereGetInfo(titles, username, password, callback)
    Given an array of titles this function will return users myanimelist values the credentials are verified before 
    
@@ -34,11 +34,11 @@ and returns the users values in an object to be displayed by the the frontend.
  
  ##Code table
  the callback function will receive an object with 6 fields 
- * code 
- * animeValues 
- * userValues 
- * jqXHR 
- * textStatus 
+ * code
+ * animeValues
+ * userValues
+ * jqXHR
+ * textStatus
  * errorThrown
  
  If one of the fields other than code is = -1 that means for that specific code the information is irrelavent or not obtainable
