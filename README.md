@@ -6,11 +6,11 @@ and returns the users values in an object to be displayed by the the frontend.
 
 ##Interfacing with the API
  The api has two functions 
- * [malanywhereVerifyCredentials](#malanywhereVerifyCredentials) 
- * [malanywhereGetInfo](#malanywhereGetInfo)
+ * [malanywhereVerifyCredentials](#malanywhereverifycredentials) 
+ * [malanywhereGetInfo](#malanywheregetinfo)
  
  
- #malanywhereVerifyCredentials
+ ##malanywhereVerifyCredentials
  malanywhereVerifyCredentials(username, password, error, success)
   Verifys the given crednetials and calles the success parameter if the credentials are correct and the error parameter if the ajax fails
   
@@ -22,7 +22,7 @@ and returns the users values in an object to be displayed by the the frontend.
   |   Function | success|Callback function if the ajax is succesful its passed a String data, a String textStatus, and a [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR)|
   
   
-  #malanywhereGetInfo
+  ##malanywhereGetInfo
   malanywhereGetInfo(titles, username, password, callback)
    Given an array of titles this function will return users myanimelist values the credentials are verified before 
    
@@ -30,7 +30,7 @@ and returns the users values in an object to be displayed by the the frontend.
   |------------------|----------|------------------------------------------------------------|
   | Array of strings | titles   | The order of titles determines which will be checked first |                                             | String           | username | The users list that should be checked                      |
   | String           | password | the password for the users list to be checked              |
-  | Function         | callback | callback function thats passed a JavaScript Object refer to the [code table](##Code-table) to see the possible paramters that will be passed to the function |  
+  | Function         | callback | callback function thats passed a JavaScript Object refer to the [code table](#code-table) to see the possible paramters that will be passed to the function |  
  
  ##Code table
  the callback function will receive an object with 6 fields 
