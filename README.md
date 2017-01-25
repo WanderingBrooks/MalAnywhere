@@ -1,5 +1,7 @@
 # MalAnywhere
 ***Jquery is necessary to use this api locally it can be downlaoded [here](https://jquery.com/download/)***
+
+
 A Web Api that returns a users myanimelist information for a given show. It will return information about the show and the values stored for the user. This is done using the myanimelist api jQuery and JavaScript a tech demo and working example can be found at https://github.com/WanderingBrooks/MalOnTheGo
 
 There are different versions of the API
