@@ -37,19 +37,23 @@ There are different versions of the API
   | String           | password | the password for the users list to be checked              |
   | Function         | callback | callback function thats passed a JavaScript Object refer to the [code table](#code-table) to see the possible paramters that will be passed to the function |  
  
- ##Code table
+ 
+ ## Callback Parameters
  the callback function will receive an object with 6 fields 
- * code
- * animeValues
- * userValues
- * jqXHR
- * textStatus
- * errorThrown
  
- If one of the fields other than code is = -1 that means for that specific code the information is irrelavent or not obtainable
+|Code| code| userValues | animeInfo     | jqXHR       |testStatus| errorThrown|
+|:----:|-----|-------------|--------------|---------------|--------|------------|
+| -3 | -3  | -1          | -1           | [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR)| "Http error reports example "error", "abort" |textual portion of the HTTP status|
+| -2 | -2  | -1          | -1           | [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR)| String saying Invalid Credentials |textual portion of the HTTP status|
+| -1 | -1  | -1          | -1           | -1| -1 |-1|
+|  0 | 0   | -1          | **id**: myanimelist show id, **title**: Title of the show, **english**: English title, **synonyms**: Other titles, **type**: 1/anime 2/OVA 3/movie 4/special 5/short, **episodes**: number of episodes, **score**: Total myanimelist score out of 10, **status**: Currently Airing, Not Yet Aired, or Finished Airing, **start_date**: year-mt-day, **end_date**: year-mt-day, **synopsis**: description of show, **image**: link to image for show | -1| -1| -1|
+|  1 | 1   | JavaScript object all fields strings: **watched_episodes**, **start_date**: formatted year-mt-dy, **finish_date**, **score**: users score from 1- 10, **status**: 1/watching, 2/completed, 3/onhold, 4/dropped, 6/plantowatch, **rewatching**: is user rewatching?, **rewatching_episodes**, **last_updated**, **tags**: user defined tags |Same as above | -1 | -1 | -1|
+
+
  
+ ##Code table
  |Code |Description                                                                       |
- |-----|----------------------------------------------------------------------------------|
+ |:-----:|----------------------------------------------------------------------------------|
  | -3  | Some other error besides invalid crednetials went wrong when performing an ajax  |
  | -2  | The given credentials were not valid                                             |
  | -1  | The given titles did not match any listing on myanimelist                        |
