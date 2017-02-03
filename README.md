@@ -36,6 +36,18 @@ There are different versions of the API
   | String           | username | The users list that should be checked                      |
   | String           | password | the password for the users list to be checked              |
   | Function         | callback | callback function thats passed a JavaScript Object refer to the [callback parameters](#callback-parameters) and [code table](#code-table) to see the possible paramters that will be passed to the function |  
+  
+  
+  ## Code table
+ possible codes and what they mean
+ 
+ |Code |Description                                                                       |
+ |-----|----------------------------------------------------------------------------------|
+ | -3  | Some other error besides invalid crednetials went wrong when performing an ajax  |
+ | -2  | The given credentials were not valid                                             |
+ | -1  | The given titles did not match any listing on myanimelist                        |
+ |  0  | The anime is on myanimelist but the show is not on the users list                |
+ |  1  | The anime is on myanimelist and the show is on the users list                    |
  
  
  ## Callback Parameters
@@ -52,16 +64,7 @@ There are different versions of the API
 
  
  
- ## Code table
- possible codes and what they mean
  
- |Code |Description                                                                       |
- |-----|----------------------------------------------------------------------------------|
- | -3  | Some other error besides invalid crednetials went wrong when performing an ajax  |
- | -2  | The given credentials were not valid                                             |
- | -1  | The given titles did not match any listing on myanimelist                        |
- |  0  | The anime is on myanimelist but the show is not on the users list                |
- |  1  | The anime is on myanimelist and the show is on the users list                    |
 
 
  
