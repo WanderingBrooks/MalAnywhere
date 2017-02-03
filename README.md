@@ -35,7 +35,7 @@ There are different versions of the API
   | Array of strings | titles   | Posisble titles to compare to shows listed on myaniemlist the order of titles determines which will be checked first |                                             
   | String           | username | The users list that should be checked                      |
   | String           | password | the password for the users list to be checked              |
-  | Function         | callback | callback function thats passed a JavaScript Object refer to the [code table](#code-table) to see the possible paramters that will be passed to the function |  
+  | Function         | callback | callback function thats passed a JavaScript Object refer to the [callback parameters](#callback-parameters) and [code table](#code-table) to see the possible paramters that will be passed to the function |  
  
  
  ## Callback Parameters
@@ -52,6 +52,7 @@ There are different versions of the API
 
  
  ##Code table
+ 
  |Code |Description                                                                       |
  |:-----:|----------------------------------------------------------------------------------|
  | -3  | Some other error besides invalid crednetials went wrong when performing an ajax  |
