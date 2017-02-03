@@ -52,6 +52,7 @@ There are different versions of the API
 
  
  ##Code table
+ possible codes and what they mean
  
  |Code |Description                                                                       |
  |:---:|----------------------------------------------------------------------------------|
