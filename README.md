@@ -54,7 +54,7 @@ There are different versions of the API
  ##Code table
  
  |Code |Description                                                                       |
- |:-----:|----------------------------------------------------------------------------------|
+ |:---:|----------------------------------------------------------------------------------|
  | -3  | Some other error besides invalid crednetials went wrong when performing an ajax  |
  | -2  | The given credentials were not valid                                             |
  | -1  | The given titles did not match any listing on myanimelist                        |
