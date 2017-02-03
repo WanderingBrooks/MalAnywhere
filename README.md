@@ -28,7 +28,7 @@ There are different versions of the API
   
   ##malanywhereGetInfo
   malanywhereGetInfo(titles, username, password, callback)
-   Given an array of titles this function will return users myanimelist values the credentials are verified before 
+   Given an array of titles this function will return users myanimelist values the credentials are automatically verified in this function 
    
   |Type              | Name     | Description                                                |
   |------------------|----------|------------------------------------------------------------|
