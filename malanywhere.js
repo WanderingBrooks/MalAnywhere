@@ -10,13 +10,13 @@
  Function that verifies the users credentials and calls either
  success or error depending on myanimelists server response.
 
- @param string username
- @param string password
- @param function error
+ @param {string} username
+ @param {string} password
+ @param {function} error
     This function will be passed a jqXHR(http://api.jquery.com/jQuery.ajax/#jqXHR),
                                  a String textStatus,
                                  and a String errorThrown
- @param function success
+ @param {function} success
     This function will be passed a String data,
                                  a String textStatus,
                                  and a jqXHR(http://api.jquery.com/jQuery.ajax/#jqXHR)
@@ -36,10 +36,10 @@ function malanywhereVerifyCredentials(username, password, error, success) {
 /*
  Uses the given titles and the given username and password to return user values for the show
 
- @param string[] titles
- @param string username
- @param string password
- @param function callback
+ @param {string[]} titles
+ @param {string} username
+ @param {string} password
+ @param {function} callback
     This function will be passed an int code
                                     animeInfo
                                     userValues
@@ -51,6 +51,7 @@ function malanywhereVerifyCredentials(username, password, error, success) {
  */
 
 function malanywhereGetInfo(titles, username, password, callback) {
+    // Verifies given credentials before trying to check mal
     malanywhereVerifyCredentials(username, password,
         function (jqXHR, textStatus, errorThrown) {
             callback({
@@ -95,6 +96,7 @@ function malanywhereGetInfo(titles, username, password, callback) {
                     if (results.length === titles.length) {
 
                         var $anime = -1;
+                        var matchedTitle = "";
                         // Iterates through all each search result
                         for (var i = 0; i < results.length; i++) {
                             var $entries = $(results[i]).find("entry");
@@ -103,11 +105,13 @@ function malanywhereGetInfo(titles, username, password, callback) {
                                 $entries.each(function () {
                                     if ($(this).find("title").text().toLowerCase() == titles[i].toLowerCase()) {
                                         $anime = $(this);
+                                        matchedTitle = $(this).find("title").text();
                                         i = results.length;
                                         j = $entries.length;
                                         return false
                                     }
                                     else if ($(this).find("english").text().toLowerCase() == titles[i].toLowerCase()) {
+                                        matchedTitle = $(this).find("english").text();
                                         $anime = $(this);
                                         i = results.length;
                                         j = $entries.length;
@@ -120,6 +124,7 @@ function malanywhereGetInfo(titles, username, password, callback) {
                                         for (var k = 0; k < $synonyms.length; k++) {
                                             if ($synonyms[k].toLowerCase() == titles[i].toLowerCase()) {
                                                 $anime = $(this);
+                                                matchedTitle = $synonyms[k];
                                                 i = results.length;
                                                 j = $entries.length;
                                                 break;
@@ -131,11 +136,12 @@ function malanywhereGetInfo(titles, username, password, callback) {
                             }
                         }
                         // If we got a hit
+                        // get the users list of anime
                         if ($anime != -1) {
                             $.ajax({
-                                "url": "http://myanimelist.net/malappinfo.php",
+                                "url": "https://myanimelist.net/malappinfo.php",
                                 "data": {"u": username, "status": "all", "type": "anime"},
-                                "success": findAnimeCreator($anime),
+                                "success": findAnimeCreator($anime, matchedTitle),
                                 "error": error,
                                 "dataType": "xml"
                             });
@@ -157,16 +163,11 @@ function malanywhereGetInfo(titles, username, password, callback) {
 
 
                     }
-                    // If something goes wrong with initialization
-                    else {
-                        alert("Wrong number of titles or data error in determineShow");
-                    }
-
                 }
             }
 
             // Scope so the callback function has access to the given id, title and episodes
-            function findAnimeCreator($searchResults) {
+            function findAnimeCreator($searchResults, matchedTitle) {
 
                 function findAnime(data) {
                     var $data = $(data);
@@ -184,7 +185,23 @@ function malanywhereGetInfo(titles, username, password, callback) {
                             }
                         });
 
-                    // If the id has been found send the pertinent information to be displayed
+                    var animeInfo = {
+                        "id": $searchResults.find("id").text(),
+                        "title": $searchResults.find("title").text(),
+                        "english": $searchResults.find("english").text(),
+                        "synonyms": $searchResults.find("synonyms").text(),
+                        "matched_title": matchedTitle,
+                        "type": $searchResults.find("series_type").text(),
+                        "episodes": $searchResults.find("episodes").text(),
+                        "score": $searchResults.find("score").text(),
+                        "status": $searchResults.find("status").text(),
+                        "start_date": $searchResults.find("start_date").text(),
+                        "end_date": $searchResults.find("end_date").text(),
+                        "synopsis": $searchResults.find("synopsis").text(),
+                        "image": $searchResults.find("image").text()
+                    };
+
+                    // If the the anime matches a show on MAL and the  user has values stored for that show
                     if ($userValues.text() != -1) {
                         $userValues = $userValues.parent();
                         callback({
@@ -200,43 +217,17 @@ function malanywhereGetInfo(titles, username, password, callback) {
                                 "last_updated": $userValues.find("my_last_updated").text(),
                                 "tags": $userValues.find("my_tags").text()
                             },
-                            "animeInfo": {
-                                "id": $searchResults.find("id").text(),
-                                "title": $searchResults.find("title").text(),
-                                "english": $searchResults.find("english").text(),
-                                "synonyms": $searchResults.find("synonyms").text(),
-                                "type": $searchResults.find("series_type").text(),
-                                "episodes": $searchResults.find("episodes").text(),
-                                "score": $searchResults.find("score").text(),
-                                "status": $searchResults.find("status").text(),
-                                "start_date": $searchResults.find("start_date").text(),
-                                "end_date": $searchResults.find("end_date").text(),
-                                "synopsis": $searchResults.find("synopsis").text(),
-                                "image": $searchResults.find("image").text()
-                            },
+                            "animeInfo": animeInfo,
                             "jqXHR": -1,
                             "textStatus": -1,
                             "errorThrown": -1
                         });
                     }
-                    // If it wasn't found in the users list send the information we have to be displayed allows updating
+                    // It wasn't on the users list
                     else {
                         callback({
                             "code": 0,
-                            "animeInfo": {
-                                "id": $searchResults.find("id").text(),
-                                "title": $searchResults.find("title").text(),
-                                "english": $searchResults.find("english").text(),
-                                "synonyms": $searchResults.find("synonyms").text(),
-                                "type": $searchResults.find("series_type").text(),
-                                "episodes": $searchResults.find("episodes").text(),
-                                "score": $searchResults.find("score").text(),
-                                "status": $searchResults.find("status").text(),
-                                "start_date": $searchResults.find("start_date").text(),
-                                "end_date": $searchResults.find("end_date").text(),
-                                "synopsis": $searchResults.find("synopsis").text(),
-                                "image": $searchResults.find("image").text()
-                            },
+                            "animeInfo": animeInfo,
                             "jqXHR": -1,
                             "textStatus": -1,
                             "errorThrown": -1
@@ -247,7 +238,7 @@ function malanywhereGetInfo(titles, username, password, callback) {
                 return findAnime;
             }
         });
-
+    // There was an error during ajaxing
     function error(jqXHR, textStatus, errorThrown) {
         callback({
             "code": -3,
