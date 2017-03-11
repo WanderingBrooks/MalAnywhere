@@ -16,44 +16,47 @@ There are 3 pieces of functionality that can be accesed with the MALAnywhere obj
 * Codes 
 * verifyCredentials 
 * getAnimeInfo 
-##verifyCredentials
+
+## verifyCredentials
 MALAnywhere.verifyCredentials(username, password, error, success)
+
+Verifys the given credentials and calls the success parameter if the credentials are correct and the error parameter if they are incorrect.
+
+| Type       | Name       | Description            |
+|:----------:|:------:|----------------------------|
+|   String   |username|The Username to be verified |
+|   String   |password|The Password to be verified |
+|   Function |  error |Callback function if the the credentials are not valid. The function is passed a [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR), a String textStatus, and a String errorThrown(refer [here](http://api.jquery.com/jquery.ajax/) in the error parameter for more info)|
+|   Function | success|Callback function if the ajax is succesful its passed a String data, a String textStatus, and a [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR) (refer [here](http://api.jquery.com/jquery.ajax/) in the success parameter for more info)|
   
-  Verifys the given credentials and calls the success parameter if the credentials are correct and the error parameter if they are incorrect.
   
-  | Type       | Name       | Description            |
-  |:----------:|:------:|----------------------------|
-  |   String   |username|The Username to be verified |
-  |   String   |password|The Password to be verified |
-  |   Function |  error |Callback function if the the credentials are not valid. The function is passed a [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR), a String textStatus, and a String errorThrown(refer [here](http://api.jquery.com/jquery.ajax/) in the error parameter for more info)|
-  |   Function | success|Callback function if the ajax is succesful its passed a String data, a String textStatus, and a [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR) (refer [here](http://api.jquery.com/jquery.ajax/) in the success parameter for more info)|
-  
-  
-  ##getAnimeInfo
-  MALAnywhere.getAnimeInfo(titles, username, password, callback)
-   
-   Function to get information about one show and the users values stored for that show. This will return the users myanimelist values and information about the show specified. Unless the show is not on Myanimelist, is stored under a different name, the user has no values stored for the specific show, the given credentials are not valid, or some other error occurs.
-   
-  |Type              | Name     | Description                                                               |
-  |:----------------:|:--------:|---------------------------------------------------------------------------|
-  | String[]         | titles   |Titles or variations of titles for an anime does not need to be more than 1|                           
-  | String           | username |The users list that should be checked                                      |
-  | String           | password |password for the users list to be checked                                  |
-  | Function         | callback |callback function thats passed a JavaScript Object refer to the Callback Parameters and Code table to see the possible paramters that will be passed to the function |  
+## getAnimeInfo
+MALAnywhere.getAnimeInfo(titles, username, password, callback)
+
+
+Function to get information about one show and the users values stored for that show. This will return the users myanimelist values and information about the show specified. Unless the show is not on Myanimelist, is stored under a different name, the user has no values stored for the specific show, the given credentials are not valid, or some other error occurs.
+
+|Type              | Name     | Description                                                               |
+|:----------------:|:--------:|---------------------------------------------------------------------------|
+| String[]         | titles   |Titles or variations of titles for an anime does not need to be more than 1|
+| String           | username |The users list that should be checked                                      |
+| String           | password |password for the users list to be checked                                  |
+| Function         | callback |callback function thats passed a JavaScript Object refer to the Callback Parameters and Code table to see the possible paramters that will be passed to the function |  
  
- ## Code table
- Possible codes and what they mean
- 
- |Code                      |Description                                                                     |
- |--------------------------|--------------------------------------------------------------------------------|
- |AJAX_ERROR                | Some other error besides invalid crednetials went wrong when performing an ajax|
- |INVALID_CREDENTIALS       | The given credentials were not valid                                           |
- |NO_SEARCH_RESULTS         | The given titles did not match any listing on myanimelist                      |
- |FOUND_BUT_NOT_ON_USER_LIST| The anime is on myanimelist but the show is not on the users list              |
- |FOUND_AND_ON_USER_LIST    | The anime is on myanimelist and the show is on the users list                  |
+## Code table
+Possible codes and what they mean
+
+|Code                      |Description                                                                     |
+|--------------------------|--------------------------------------------------------------------------------|
+|AJAX_ERROR                | Some other error besides invalid crednetials went wrong when performing an ajax|
+|INVALID_CREDENTIALS       | The given credentials were not valid                                           |
+|NO_SEARCH_RESULTS         | The given titles did not match any listing on myanimelist                      |
+|FOUND_BUT_NOT_ON_USER_LIST| The anime is on myanimelist but the show is not on the users list              |
+|FOUND_AND_ON_USER_LIST    | The anime is on myanimelist and the show is on the users list                  |
  
 
- ## Callback Parameters
+
+## Callback Parameters
 Each code and its specific object with descriptions
  
 | code | userValues  | animeInfo    | jqXHR         |testStatus| errorThrown|
