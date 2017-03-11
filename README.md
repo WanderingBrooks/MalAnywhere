@@ -10,9 +10,9 @@ There are different versions of the API
 
 ##Interfacing with the Library
 There are 3 pieces of functionality that can be accesed with the MALAnywhere object
- * [Codes](#codetable) 
- * [verifyCredentials](#verifyCredentials)
- * [getAnimeInfo](#getAnimeInfo)
+ * Codes 
+ * verifyCredentials
+ * getAnimeInfo
  
  ##verifyCredentials
  MALAnywhere.verifyCredentials(username, password, error, success)
@@ -37,7 +37,7 @@ There are 3 pieces of functionality that can be accesed with the MALAnywhere obj
   | String[]         | titles   |Titles of the show that should be queried does not have to be more than one|                           
   | String           | username |The users list that should be checked                                      |
   | String           | password |password for the users list to be checked                                  |
-  | Function         | callback |callback function thats passed a JavaScript Object refer to the [callback parameters](#callback-parameters) and [code table](#code-table) to see the possible paramters that will be passed to the function |  
+  | Function         | callback |callback function thats passed a JavaScript Object refer to the Callback Parameters and Code table to see the possible paramters that will be passed to the function |  
  
  ## Code table
  possible codes and what they mean
