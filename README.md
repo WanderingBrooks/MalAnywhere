@@ -16,6 +16,7 @@ There are 3 pieces of functionality that can be accesed with the MALAnywhere obj
  
  ##verifyCredentials
  MALAnywhere.verifyCredentials(username, password, error, success)
+  
   Verifys the given crednetials and calls the success parameter if the credentials are correct and the error parameter if the ajax fails
   
   | Type       | Name       | Description            |
@@ -28,7 +29,8 @@ There are 3 pieces of functionality that can be accesed with the MALAnywhere obj
   
   ##getAnimeInfo
   MALAnywhere.getAnimeInfo(titles, username, password, callback)
-   Functiion to get information about one show and the users values stored for that show. This will return the users myanimelist values and information about the show specified. Unless the show is not on Myanimelist, is stored under a different name, the user has no values stored for the specific show, the given credentials are not valid, or some other error occurs. The credentials are automatically verified in this function 
+   
+   Function to get information about one show and the users values stored for that show. This will return the users myanimelist values and information about the show specified. Unless the show is not on Myanimelist, is stored under a different name, the user has no values stored for the specific show, the given credentials are not valid, or some other error occurs. The credentials are automatically verified in this function 
    
   |Type              | Name     | Description                                                               |
   |:----------------:|:--------:|---------------------------------------------------------------------------|
@@ -40,20 +42,20 @@ There are 3 pieces of functionality that can be accesed with the MALAnywhere obj
  ## Code table
  possible codes and what they mean
  
- |Code |Description                                                                            |
- |:---:|---------------------------------------------------------------------------------------|
- |AJAX_ERROR| Some other error besides invalid crednetials went wrong when performing an ajax  |
- |INVALID_CREDENTIALS| The given credentials were not valid                                    |
- |NO_SEARCH_RESULTS| The given titles did not match any listing on myanimelist                 |
- |FOUND_BUT_NOT_ON_USER_LIST| The anime is on myanimelist but the show is not on the users list|
- |FOUND_AND_ON_USER_LIST| The anime is on myanimelist and the show is on the users list        |
+ |Code                      |Description                                                                     |
+ |--------------------------|--------------------------------------------------------------------------------|
+ |AJAX_ERROR                | Some other error besides invalid crednetials went wrong when performing an ajax|
+ |INVALID_CREDENTIALS       | The given credentials were not valid                                           |
+ |NO_SEARCH_RESULTS         | The given titles did not match any listing on myanimelist                      |
+ |FOUND_BUT_NOT_ON_USER_LIST| The anime is on myanimelist but the show is not on the users list              |
+ |FOUND_AND_ON_USER_LIST    | The anime is on myanimelist and the show is on the users list                  |
  
 
  ## Callback Parameters
  the callback function will receive an object with 6 fields 
  
 | code | userValues  | animeInfo    | jqXHR         |testStatus| errorThrown|
-|:----:|-------------|--------------|---------------|----------|------------|
+|------|-------------|--------------|---------------|----------|------------|
 | AJAX_ERROR   ||| [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR)| "Http error reports example "error", "abort" |textual portion of the HTTP status|
 |INVALID_CREDENTIALS||| [jqXHR](http://api.jquery.com/jQuery.ajax/#jqXHR)| String saying Invalid Credentials | textual portion of the HTTP status|
 |NO_SEARCH_RESULTS||||||
