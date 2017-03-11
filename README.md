@@ -52,7 +52,7 @@ There are 3 pieces of functionality that can be accesed with the MALAnywhere obj
  
 
  ## Callback Parameters
- the callback function will receive an object with 6 fields 
+Each code and its specific object with descriptions
  
 | code | userValues  | animeInfo    | jqXHR         |testStatus| errorThrown|
 |------|-------------|--------------|---------------|----------|------------|
