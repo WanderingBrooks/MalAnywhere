@@ -44,8 +44,7 @@ Function to get information about one show and the users values stored for that 
 | Function         | callback |callback function thats passed a JavaScript Object refer to the Code table to see the possible fields of that object and a desciption of the codes                                                                 |  
  
 ## Code table
-Possible codes a description of them and their repsective values. These are all wrapped in an object where the code is a field as well.
-[Example return object](#example-object)
+Possible codes a description of them and their repsective values. These are all wrapped in an object where the code is a field as well. Refer to the [return object](#example-object) below to see an example return object from MALAnywhere.getAnimeInfo().
 
 |Code                      |Description and fields in object                                                |
 |--------------------------|--------------------------------------------------------------------------------|
