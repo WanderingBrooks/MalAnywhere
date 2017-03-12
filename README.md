@@ -13,9 +13,9 @@ There are different versions of the API
 ##Interfacing with the Library
 There are 3 pieces of functionality that can be accesed with the MALAnywhere object
  
-* verifyCredentials 
-* getAnimeInfo 
-* Codes 
+* [verifyCredentials](#verifycredentials) 
+* [getAnimeInfo](#getanimeinfo) 
+* [Codes](#code-table) 
 
 ## verifyCredentials
 MALAnywhere.verifyCredentials(username, password, error, success)
@@ -45,6 +45,7 @@ Function to get information about one show and the users values stored for that 
  
 ## Code table
 Possible codes a description of them and their repsective values. These are all wrapped in an object where the code is a field as well.
+[Example return object](#example-object)
 
 |Code                      |Description and fields in object                                                |
 |--------------------------|--------------------------------------------------------------------------------|
@@ -52,4 +53,8 @@ Possible codes a description of them and their repsective values. These are all 
 |INVALID_CREDENTIALS       | The given credentials were not valid.<br>Fields:<br>**code**: INVALID_CREDENTIALS<br>**jqXHR**: refer to the jQuery documentation [here](http://api.jquery.com/jQuery.ajax/#jqXHR)<br>**textStatus**: the String "Invalid Credentials"<br>**errorThrown**:textual portion of the HTTP status                                           |
 |NO_SEARCH_RESULTS         | The given titles did not match any listing on myanimelist.<br>Fields:<br>**code**: NO_SEARCH_RESULTS                      |
 |FOUND_BUT_NOT_ON_USER_LIST| The anime is on myanimelist but the show is not on the users list.<br>Fields:<br>**code**: FOUND_BUT_NOT_ON_USER_LIST<br>**animeInfo** (object all fields strings): <ul><li>**id**: myanimelist show id</li><li>**title**: Title of the show</li><li>**english**: English title</li><li>**synonyms**: Other titles</li><li>**matched_title**: Title that matched on MAL search</li><li>**type**: TV, Special, OVA, Movie, ONA</li><li>**episodes**: number of episodes</li><li>**score**: Total myanimelist score out</li><li>**status**: Currently Airing, Not Yet Aired, or Finished Airing</li><li>**start_date**: year-mt-day</li><li>**end_date**: year-mt-day</li><li>**synopsis**: description of show</li><li>**image**: link to image for anime</li></ul>              |
-|FOUND_AND_ON_USER_LIST    | The anime is on myanimelist and the show is on the users list.<br>Fields:<br>**code**: FOUND_AND_ON_USER_LIST<br>**animeInfo** (object all fields strings): <ul><li>**id**: myanimelist show id</li><li>**title**: Title of the show</li><li>**english**: English title</li><li>**synonyms**: Other titles</li><li>**matched_title**: Title that matched on MAL search</li><li>**type**: TV, Special, OVA, Movie, ONA</li><li>**episodes**: number of episodes</li><li>**score**: Total myanimelist score out</li><li>**status**: Currently Airing, Not Yet Aired, or Finished Airing</li><li>**start_date**: year-mt-day</li><li>**end_date**: year-mt-day</li><li>**synopsis**: description of show</li><li>**image**: link to image for anime</li></ul>**userValues** (object all fields strings): <ul><li>**watched_episodes**: number of watched episodes</li><li>**start_date**: formatted year-month-date</li><li>**finish_date**: formatted year-month-day</li><li>**score**: users score from 1- 10</li><li>**status**: 1/watching, 2/completed, 3/onhold, 4/dropped, 6/plantowatch</li><li>**rewatching**: is user rewatching?</li><li>**rewatching_episodes**: number of episodes rewatched</li><li>**last_updated**</li><li>**tags**: user defined tags</li> </ul>                  |
+|FOUND_AND_ON_USER_LIST    | The anime is on myanimelist and the show is on the users list.<br>Fields:<br>**code**: FOUND_AND_ON_USER_LIST<br>**animeInfo** (object all fields strings): <ul><li>**id**: myanimelist show id</li><li>**title**: Title of the show</li><li>**english**: English title</li><li>**synonyms**: Other titles</li><li>**matched_title**: Title that matched on MAL search</li><li>**type**: TV, Special, OVA, Movie, ONA</li><li>**episodes**: number of episodes</li><li>**score**: Total myanimelist score out</li><li>**status**: Currently Airing, Not Yet Aired, or Finished Airing</li><li>**start_date**: year-mt-day</li><li>**end_date**: year-mt-day</li><li>**synopsis**: description of show</li><li>**image**: link to image for anime</li></ul>**userValues** (object all fields strings): <ul><li>**watched_episodes**: number of watched episodes</li><li>**start_date**: formatted year-month-date</li><li>**finish_date**: formatted year-month-day</li><li>**score**: users score from 1- 10</li><li>**status**: 1/watching, 2/completed, 3/onhold, 4/dropped, 6/plantowatch</li><li>**rewatching**: is user rewatching?</li><li>**rewatching_episodes**: number of episodes rewatched</li><li>**tags**: user defined tags</li> </ul>                  |
+
+## Example Object
+![](https://github.com/WanderingBrooks/MalAnywhere/blob/master/Images/ExampleObject.PNG)
+
