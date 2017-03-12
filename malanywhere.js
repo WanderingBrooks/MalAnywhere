@@ -107,7 +107,7 @@ MALAnywhere = (function () {
             "english": $searchResults.find("english").text(),
             "synonyms": $searchResults.find("synonyms").text(),
             "matched_title": matchedTitle,
-            "type": $searchResults.find("series_type").text(),
+            "type": $searchResults.find("type").text(),
             "episodes": $searchResults.find("episodes").text(),
             "score": $searchResults.find("score").text(),
             "status": $searchResults.find("status").text(),
@@ -130,7 +130,6 @@ MALAnywhere = (function () {
                     "status": $userValues.find("my_status").text(),
                     "rewatching": $userValues.find("my_rewatching").text(),
                     "rewatching_episodes": $userValues.find("my_rewatching_ep").text(),
-                    "last_updated": $userValues.find("my_last_updated").text(),
                     "tags": $userValues.find("my_tags").text()
                 },
                 "animeInfo": animeInfo
